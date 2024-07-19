@@ -3,7 +3,7 @@
 client_id = "03034dae317a96d1d93360111343335c"
 name = "united-b2b"
 handle = "united-b2b"
-application_url = "https://outstanding-stanley-premiere-actress.trycloudflare.com"
+application_url = "https://custom-codes.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products"
 
 [auth]
 redirect_urls = [
-  "https://outstanding-stanley-premiere-actress.trycloudflare.com/auth/callback",
-  "https://outstanding-stanley-premiere-actress.trycloudflare.com/auth/shopify/callback",
-  "https://outstanding-stanley-premiere-actress.trycloudflare.com/api/auth/callback"
+  "https://custom-codes.com/auth/callback",
+  "https://custom-codes.com/auth/shopify/callback",
+  "https://custom-codes.com/api/auth/callback"
 ]
 
 [webhooks]
