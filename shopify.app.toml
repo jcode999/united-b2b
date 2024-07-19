@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "03034dae317a96d1d93360111343335c"
+name = "united-b2b"
+handle = "united-b2b"
+application_url = "https://outstanding-stanley-premiere-actress.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "jigme-store-dev.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_products"
+
+[auth]
+redirect_urls = [
+  "https://outstanding-stanley-premiere-actress.trycloudflare.com/auth/callback",
+  "https://outstanding-stanley-premiere-actress.trycloudflare.com/auth/shopify/callback",
+  "https://outstanding-stanley-premiere-actress.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-07"
+
+[pos]
+embedded = false
