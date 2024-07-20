@@ -16,34 +16,69 @@ export default function CustomForm() {
   const actionData = useActionData();
   
   return (
-    <Form className='customForm' method="post" encType="multipart/form-data">
-      <div>
-        <label htmlFor="customerName">Name:</label>
-        <input type="text" id="customerName" name="customerName" required />
-      </div>
+    <div class="custom-form-container-wrapper">
+      <div class="form-container">
+      <Form  method="post" encType="multipart/form-data">
 
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-      </div>
+        <div className="form-group">
+          <label htmlFor="firstName">Name:</label>
+          <input type="text" id="firstName" name="firstName" required />
+        </div>
+        <div class="form-group">
+          <label htmlFor="lastname">Last Name</label>
+          <input type="text" id="lastname" name="lastname" required />
+        </div>
 
-      <div>
-        <label htmlFor="file">Upload File:</label>
-        <input type="file" id="file" name="file" required />
-      </div>
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
 
-      {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
-      
-      <button type="submit">Submit</button>
-    </Form>
+        <div class="form-group">
+            <label htmlFor="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required/>
+        </div>
+
+        <div class="form-group">
+            <label htmlFor="taxpayerid">Tax Payer ID</label>
+            <input type="text" id="taxpayerid" name="taxpayerid" required/>
+        </div>
+
+        <div class="form-group">
+            <label htmlFor="tobaccopermit">Tobacco Permit</label>
+            <input type="file" id="tobaccopermit" name="tobaccopermit" required/>
+        </div>
+
+        <div class="form-group">
+            <label htmlFor="ecigpermit">E-Cigarette Permit</label>
+            <input type="file" id="ecigpermit" name="ecigpermit" required/>
+        </div>
+
+        <div>
+          <label htmlFor="file">Upload File:</label>
+          <input type="file" id="file" name="file" required />
+        </div>
+
+        {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
+        
+        <div class="form-group">
+            <button type="submit">Submit</button>
+        </div>
+      </Form>
+      </div>
+    </div>
   );
 }
 
 export async function action({ request }) {
   const formData = await request.formData();
-  const customerName = formData.get("customerName");
+  const firstName = formData.get("firstname");
+  const lastName = formData.get("lastname");
   const email = formData.get("email");
-  const file = formData.get("file");
+  const phoneNumber = formData.get("phone");
+  const taxPayerId = formData.get("taxpayerid")
+  const tobaccoPermit = formData.get("tobaccopermit")
+  const ecigPermit = formData.get("ecigpermit")
   const shop = 'foo-bar'
 
   // if (typeof customerName !== "string" || typeof email !== "string" || !(file instanceof Blob)) {
@@ -56,7 +91,7 @@ export async function action({ request }) {
 
   await db.tobaccoForm.create({
     data: {
-      customerName,
+      firstName,
       shop
     },
   });
