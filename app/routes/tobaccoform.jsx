@@ -54,10 +54,7 @@ export default function CustomForm() {
             <input type="file" id="ecigpermit" name="ecigpermit" required/>
         </div>
 
-        <div>
-          <label htmlFor="file">Upload File:</label>
-          <input type="file" id="file" name="file" required />
-        </div>
+        
 
         {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
         
