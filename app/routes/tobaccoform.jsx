@@ -24,7 +24,7 @@ export default function CustomForm() {
           <label htmlFor="firstName">Name:</label>
           <input type="text" id="firstName" name="firstName" required />
         </div>
-        <div class="form-group">
+        {/* <div class="form-group">
           <label htmlFor="lastname">Last Name</label>
           <input type="text" id="lastname" name="lastname" required />
         </div>
@@ -52,7 +52,7 @@ export default function CustomForm() {
         <div class="form-group">
             <label htmlFor="ecigpermit">E-Cigarette Permit</label>
             <input type="file" id="ecigpermit" name="ecigpermit" required/>
-        </div>
+        </div> */}
 
         
 
@@ -70,12 +70,12 @@ export default function CustomForm() {
 export async function action({ request }) {
   const formData = await request.formData();
   const firstName = formData.get("firstname");
-  const lastName = formData.get("lastname");
-  const email = formData.get("email");
-  const phoneNumber = formData.get("phone");
-  const taxPayerId = formData.get("taxpayerid")
-  const tobaccoPermit = formData.get("tobaccopermit")
-  const ecigPermit = formData.get("ecigpermit")
+  // const lastName = formData.get("lastname");
+  // const email = formData.get("email");
+  // const phoneNumber = formData.get("phone");
+  // const taxPayerId = formData.get("taxpayerid")
+  // const tobaccoPermit = formData.get("tobaccopermit")
+  // const ecigPermit = formData.get("ecigpermit")
   const shop = 'foo-bar'
   const customerName = 'jigme'
 
@@ -83,9 +83,9 @@ export async function action({ request }) {
   //   return json({ error: "Invalid form data" }, { status: 400 });
   // }
 
-  const fileBuffer = Buffer.from(await file.arrayBuffer());
-  const filePath = path.join("/uploads", `${Date.now()}-${file.name}`);
-  await fs.writeFile(`./public${filePath}`, fileBuffer);
+  // const fileBuffer = Buffer.from(await file.arrayBuffer());
+  // const filePath = path.join("/uploads", `${Date.now()}-${file.name}`);
+  // await fs.writeFile(`./public${filePath}`, fileBuffer);
   console.log("going to create object")
   await db.tobaccoForm.create({
     data: {
