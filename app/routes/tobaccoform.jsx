@@ -16,7 +16,7 @@ export default function CustomForm() {
   const actionData = useActionData();
   
   return (
-    <div class="custom-form-container-wrapper" id="custom-form-container-wrapper">
+    <div class="custom-form-container-wrapper" >
       <div class="form-container">
       <Form  method="post" encType="multipart/form-data">
 
