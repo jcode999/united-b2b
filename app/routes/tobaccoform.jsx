@@ -85,7 +85,7 @@ export async function action({ request }) {
   const fileBuffer = Buffer.from(await file.arrayBuffer());
   const filePath = path.join("/uploads", `${Date.now()}-${file.name}`);
   await fs.writeFile(`./public${filePath}`, fileBuffer);
-
+  console.log("going to create object")
   await db.tobaccoForm.create({
     data: {
       firstName,
