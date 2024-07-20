@@ -77,6 +77,7 @@ export async function action({ request }) {
   const tobaccoPermit = formData.get("tobaccopermit")
   const ecigPermit = formData.get("ecigpermit")
   const shop = 'foo-bar'
+  const customerName = 'jigme'
 
   // if (typeof customerName !== "string" || typeof email !== "string" || !(file instanceof Blob)) {
   //   return json({ error: "Invalid form data" }, { status: 400 });
@@ -88,10 +89,11 @@ export async function action({ request }) {
   console.log("going to create object")
   await db.tobaccoForm.create({
     data: {
-      firstName,
+      customerName,
       shop
     },
   });
+  
   
   return redirect(`https://jigme-store-dev.myshopify.com/`);
   
