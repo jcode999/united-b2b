@@ -95,7 +95,7 @@ export async function action({ request }) {
   });
   
   
-  return redirect(`https://jigme-store-dev.myshopify.com/`);
-  
+  // return redirect(`https://jigme-store-dev.myshopify.com/`);
+  return {status:'200'}
   
 }
