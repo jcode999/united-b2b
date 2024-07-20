@@ -18,7 +18,7 @@ export default function CustomForm() {
   return (
     <div class="custom-form-container-wrapper" >
       <div class="form-container">
-      <Form  method="post" encType="multipart/form-data">
+      <Form  method="post"  action = "https:custom-codes.com/tobaccoform"encType="multipart/form-data">
 
         <div className="form-group">
           <label htmlFor="firstName">Name:</label>
