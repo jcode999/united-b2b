@@ -33,5 +33,6 @@ CREATE TABLE "QRCode" (
 -- CreateTable
 CREATE TABLE "TobaccoForm" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "customer_name" TEXT NOT NULL
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL
 );

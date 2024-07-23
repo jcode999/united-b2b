@@ -45,6 +45,8 @@ model QRCode {
 
 model TobaccoForm {
   id               Int      @id @default(autoincrement())
-  customerName     String
-  shop             String
+  firstName        String
+  lastName         String
+  tobaccoPermit    String
+
 }

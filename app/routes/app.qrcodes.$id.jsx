@@ -39,7 +39,7 @@ export async function loader({ request, params }) {
       title: "",
     });
   }
-
+  
   return json(await getQRCode(Number(params.id), admin.graphql));
 }
 

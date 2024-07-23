@@ -1,126 +1,45 @@
-import { json } from "@remix-run/node";
-import { useLoaderData, Link, useNavigate } from "@remix-run/react";
-import { authenticate } from "../shopify.server";
+
+import { json, } from "@remix-run/node";
 import {
-  Card,
-  EmptyState,
-  Layout,
-  Page,
-  IndexTable,
-  Thumbnail,
-  Text,
-  Icon,
-  InlineStack,
-} from "@shopify/polaris";
+  
+  useLoaderData,useNavigate
+  
+} from "@remix-run/react";
 
-import { getQRCodes } from "../models/QRCode.server";
-import { AlertDiamondIcon, ImageIcon } from "@shopify/polaris-icons";
+// import {CreateCustomer} from "../api-services/CreateCustomer"
 
-export async function loader({ request }) {
-  const { admin, session } = await authenticate.admin(request);
-  const qrCodes = await getQRCodes(session.shop, admin.graphql);
+import { authenticate } from "../shopify.server";
+// import db from "../db.server";
+import { getTobaccoForms } from "../models/TobaccoForm.server";
 
-  return json({
-    qrCodes,
-  });
+export async function loader({request,params}){
+    const { admin } = await authenticate.admin(request);
+    return json(await getTobaccoForms())
 }
 
-const EmptyQRCodeState = ({ onAction }) => (
-  <EmptyState
-    heading="Create unique QR codes for your product"
-    action={{
-      content: "Create QR code",
-      onAction,
-    }}
-    image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
-  >
-    <p>Allow customers to scan codes and buy products using their phones.</p>
-  </EmptyState>
-);
-
-function truncate(str, { length = 25 } = {}) {
-  if (!str) return "";
-  if (str.length <= length) return str;
-  return str.slice(0, length) + "…";
-}
-
-const QRTable = ({ qrCodes }) => (
-  <IndexTable
-    resourceName={{
-      singular: "QR code",
-      plural: "QR codes",
-    }}
-    itemCount={qrCodes.length}
-    headings={[
-      { title: "Thumbnail", hidden: true },
-      { title: "Title" },
-      { title: "Product" },
-      { title: "Date created" },
-      { title: "Scans" },
-    ]}
-    selectable={false}
-  >
-    {qrCodes.map((qrCode) => (
-      <QRTableRow key={qrCode.id} qrCode={qrCode} />
-    ))}
-  </IndexTable>
-);
-
-const QRTableRow = ({ qrCode }) => (
-  <IndexTable.Row id={qrCode.id} position={qrCode.id}>
-    <IndexTable.Cell>
-      <Thumbnail
-        source={qrCode.productImage || ImageIcon}
-        alt={qrCode.productTitle}
-        size="small"
-      />
-    </IndexTable.Cell>
-    <IndexTable.Cell>
-      <Link to={`qrcodes/${qrCode.id}`}>{truncate(qrCode.title)}</Link>
-    </IndexTable.Cell>
-    <IndexTable.Cell>
-      {qrCode.productDeleted ? (
-        <InlineStack align="start" gap="200">
-          <span style={{ width: "20px" }}>
-            <Icon source={AlertDiamondIcon} tone="critical" />
-          </span>
-          <Text tone="critical" as="span">
-            product has been deleted
-          </Text>
-        </InlineStack>
-      ) : (
-        truncate(qrCode.productTitle)
-      )}
-    </IndexTable.Cell>
-    <IndexTable.Cell>
-      {new Date(qrCode.createdAt).toDateString()}
-    </IndexTable.Cell>
-    <IndexTable.Cell>{qrCode.scans}</IndexTable.Cell>
-  </IndexTable.Row>
-);
-
-export default function Index() {
-  const { qrCodes } = useLoaderData();
+export default function TobaccoForms() {
+  
+  const forms = useLoaderData();
   const navigate = useNavigate();
+  
+
 
   return (
-    <Page>
-      <ui-title-bar title="QR codes">
-        <button variant="primary" onClick={() => navigate("/app/qrcodes/new")}>
-          Create QR code
-        </button>
-      </ui-title-bar>
-      <Layout>
-        <Layout.Section>
-          <Card padding="0">
-            {qrCodes.length === 0 ? (
-              <EmptyQRCodeState onAction={() => navigate("qrcodes/new")} />
-            ) : (
-              <QRTable qrCodes={qrCodes} />
-            )}
-          </Card>
-        </Layout.Section>
-      </Layout>
-    </Page>
-  );
+      <div style={{'background':'white','padding':'2em'}}>
+        <h1 style={{'fontSize':'large','fontWeight':'bold','marginBottom':'2em'}}>Tobacco Related Documents</h1>
+          {forms.map((form)=>(
+          <div key ={form.firstName} style={{'display':'flex','border':'1px solid black','margin':'1em','padding':'1em','alignItems':'center','gap':'0.5em','borderRadius':'20px'}}
+          onClick={() => navigate("/app/tobaccoform/"+String(form.id))}>
+            {/* <Avatar customer size="md" name={form.firstName} /> */}
+            <img width={30} height={30} src = '/user.png' alt="foo"></img>
+            <h2>{form.firstName}</h2>
+            <h2>{form.lastName}</h2>
+            
+          </div>
+          
+        ))}
+        
+      </div>
+)
 }
+

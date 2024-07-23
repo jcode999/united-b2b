@@ -2,32 +2,36 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import db from "../db.server"; // Make sure to set up db.server.js to export Prisma client instance
-import fs from "fs/promises";
-import path from "path";
 import "../custom-css/custom-form.css"
+import {getTobaccoForms} from "../models/TobaccoForm.server"
+import fs from 'fs';
+import path from 'path';
 
-// export function meta() {
-//   return {
-//     title: "Custom Registration Form",
-//   };
-// }
+
+
 
 export default function CustomForm() {
   const actionData = useActionData();
   
   return (
-    <div class="custom-form-container-wrapper" >
+    <div className="custom-form-container-wrapper" >
       <div class="form-container">
-      <Form  method="post"  action = "https:custom-codes.com/tobaccoform"encType="multipart/form-data">
+      
+      <Form  method="post"  action = '/apps/proxy'encType="multipart/form-data">
 
         <div className="form-group">
-          <label htmlFor="firstName">Name:</label>
+          <label htmlFor="firstName">First Name:</label>
           <input type="text" id="firstName" name="firstName" required />
         </div>
-        {/* <div class="form-group">
+        <div class="form-group">
           <label htmlFor="lastname">Last Name</label>
           <input type="text" id="lastname" name="lastname" required />
         </div>
+        <div class="form-group">
+            <label htmlFor="tobaccopermit">Tobacco Permit</label>
+            <input type="file" id="tobaccopermit" name="tobaccopermit" required/>
+        </div>
+        {/* 
 
         <div className="form-group">
           <label htmlFor="email">Email:</label>
@@ -44,10 +48,7 @@ export default function CustomForm() {
             <input type="text" id="taxpayerid" name="taxpayerid" required/>
         </div>
 
-        <div class="form-group">
-            <label htmlFor="tobaccopermit">Tobacco Permit</label>
-            <input type="file" id="tobaccopermit" name="tobaccopermit" required/>
-        </div>
+       
 
         <div class="form-group">
             <label htmlFor="ecigpermit">E-Cigarette Permit</label>
@@ -63,21 +64,48 @@ export default function CustomForm() {
         </div>
       </Form>
       </div>
+      
     </div>
   );
 }
 
 export async function action({ request }) {
+  
   const formData = await request.formData();
-  const firstName = formData.get("firstname");
-  // const lastName = formData.get("lastname");
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastname");
+  const file = formData.get('tobaccopermit');
+  const uploadPath = path.join(process.cwd(), 'public/uploads');
+
+  if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+  }
+  const filePath = path.join(uploadPath, String(firstName).toLowerCase()+'-'+String(lastName).toLowerCase()+'-tobacco-permit.png');
+  const fileStream = fs.createWriteStream(filePath);
+  const reader = file.stream().getReader();
+
+  let fileData = new Uint8Array();
+  let done = false;
+
+  while (!done) {
+    const { done: doneReading, value } = await reader.read();
+    if (doneReading) {
+      done = true;
+    } else {
+      fileData = new Uint8Array([...fileData, ...value]);
+    }
+  }
+
+  fileStream.write(fileData);
+  fileStream.end();
+
+  
   // const email = formData.get("email");
   // const phoneNumber = formData.get("phone");
   // const taxPayerId = formData.get("taxpayerid")
   // const tobaccoPermit = formData.get("tobaccopermit")
   // const ecigPermit = formData.get("ecigpermit")
-  const shop = 'foo-bar'
-  const customerName = 'jigme'
+  
 
   // if (typeof customerName !== "string" || typeof email !== "string" || !(file instanceof Blob)) {
   //   return json({ error: "Invalid form data" }, { status: 400 });
@@ -86,16 +114,18 @@ export async function action({ request }) {
   // const fileBuffer = Buffer.from(await file.arrayBuffer());
   // const filePath = path.join("/uploads", `${Date.now()}-${file.name}`);
   // await fs.writeFile(`./public${filePath}`, fileBuffer);
-  console.log("going to create object")
+
+
   await db.tobaccoForm.create({
     data: {
-      customerName,
-      shop
+      firstName,
+      lastName,
+      
     },
   });
+ 
   
-  
-  // return redirect(`https://jigme-store-dev.myshopify.com/`);
-  return {status:'200'}
+  return redirect(`https://jigme-store-dev.myshopify.com/`);
+  // return {status:'200'}
   
 }
