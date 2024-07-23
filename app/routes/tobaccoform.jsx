@@ -3,7 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import db from "../db.server"; // Make sure to set up db.server.js to export Prisma client instance
 import "../custom-css/custom-form.css"
-import {getTobaccoForms} from "../models/TobaccoForm.server"
+
 import fs from 'fs';
 import path from 'path';
 
