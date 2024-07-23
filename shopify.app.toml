@@ -3,7 +3,7 @@
 client_id = "03034dae317a96d1d93360111343335c"
 name = "united-b2b"
 handle = "united-b2b"
-application_url = "https://lovely-designation-cosmetic-whose.trycloudflare.com"
+application_url = "https://trips-acquisition-cathedral-ncaa.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,16 +17,16 @@ scopes = "read_products"
 
 [auth]
 redirect_urls = [
-  "https://lovely-designation-cosmetic-whose.trycloudflare.com/auth/callback",
-  "https://lovely-designation-cosmetic-whose.trycloudflare.com/auth/shopify/callback",
-  "https://lovely-designation-cosmetic-whose.trycloudflare.com/api/auth/callback"
+  "https://trips-acquisition-cathedral-ncaa.trycloudflare.com/auth/callback",
+  "https://trips-acquisition-cathedral-ncaa.trycloudflare.com/auth/shopify/callback",
+  "https://trips-acquisition-cathedral-ncaa.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
 api_version = "2024-07"
 
 [app_proxy]
-url = "https://lovely-designation-cosmetic-whose.trycloudflare.com/tobaccoform"
+url = "https://trips-acquisition-cathedral-ncaa.trycloudflare.com/tobaccoform"
 subpath = "proxy"
 prefix = "apps"
 

@@ -18,8 +18,8 @@ export default function TobaccoForm(){
             <span style={{'fontWeight':'bold'}}>Customer: </span><span style={{'fontWeight':'small'}}>{form.firstName}</span>
             
             <h1 style={{'fontWeight':'bold'}}>Tobacco Permit</h1>
-            <img width={800} height = {500} src ={`/uploads/${form.firstName.toLowerCase()}-${form.lastName.toLowerCase()}-tobacco-permit.png`} alt='tobacco-permit'/>
-        
+            <img width={800} height = {500} src ={`/uploads/${form.businessName.toLowerCase()}-tobacco-permit.png`} alt='tobacco-permit'/>
+            
         </div>
         
     )

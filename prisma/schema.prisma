@@ -47,6 +47,7 @@ model TobaccoForm {
   id               Int      @id @default(autoincrement())
   firstName        String
   lastName         String
-  tobaccoPermit    String
+  businessName     String
+  tobaccoPermitUrl    String
 
 }

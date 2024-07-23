@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     console.log("-------------------------------------------------------")
     console.log("fetching page: tobaccoform")
-    // const url = process.env.SHOPIFY_APP_URL + '/tobaccoform'
-    const url = "https://lovely-designation-cosmetic-whose.trycloudflare.com/tobaccoform"
+    // const url = vite.import.env.SHOPIFY_APP_URL + '/tobaccoform'
+    const url = "https://trips-acquisition-cathedral-ncaa.trycloudflare.com/tobaccoform"
     fetch(url)
       .then(response => response.text())
       .then(html => {

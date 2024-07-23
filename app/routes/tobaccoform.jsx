@@ -28,6 +28,11 @@ export default function CustomForm() {
           <input type="text" id="lastname" name="lastname" required />
         </div>
         <div class="form-group">
+          <label htmlFor="businessName">Business Name</label>
+          <input type="text" id="businessName" name="businessName" required />
+        </div>
+        
+        <div class="form-group">
             <label htmlFor="tobaccopermit">Tobacco Permit</label>
             <input type="file" id="tobaccopermit" name="tobaccopermit" required/>
         </div>
@@ -74,13 +79,14 @@ export async function action({ request }) {
   const formData = await request.formData();
   const firstName = formData.get("firstName");
   const lastName = formData.get("lastname");
+  const businessName = formData.get("businessName")
   const file = formData.get('tobaccopermit');
   const uploadPath = path.join(process.cwd(), 'public/uploads');
 
   if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath, { recursive: true });
   }
-  const filePath = path.join(uploadPath, String(firstName).toLowerCase()+'-'+String(lastName).toLowerCase()+'-tobacco-permit.png');
+  const filePath = path.join(uploadPath, String(businessName).toLowerCase()+'-tobacco-permit.png');
   const fileStream = fs.createWriteStream(filePath);
   const reader = file.stream().getReader();
 
@@ -98,7 +104,7 @@ export async function action({ request }) {
 
   fileStream.write(fileData);
   fileStream.end();
-
+  const tobaccoPermitUrl = '/uploads/'+String(businessName).toLowerCase()+'-tobacco-permit.png'
   
   // const email = formData.get("email");
   // const phoneNumber = formData.get("phone");
@@ -120,7 +126,8 @@ export async function action({ request }) {
     data: {
       firstName,
       lastName,
-      
+      businessName,
+      tobaccoPermitUrl,
     },
   });
  
