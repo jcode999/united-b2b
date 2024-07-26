@@ -110,29 +110,29 @@ export async function action({ request }) {
   const file = formData.get('tobaccoPermit');
   const uploadPath = path.join(process.cwd(), 'public/uploads');
 
-  if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath, { recursive: true });
-  }
-  const filePath = path.join(uploadPath, String(businessName).toLowerCase()+'-tobacco-permit.png');
-  const fileStream = fs.createWriteStream(filePath);
-  const reader = file.stream().getReader();
+//   if (!fs.existsSync(uploadPath)) {
+//     fs.mkdirSync(uploadPath, { recursive: true });
+//   }
+//   const filePath = path.join(uploadPath, String(businessName).toLowerCase()+'-tobacco-permit.png');
+//   const fileStream = fs.createWriteStream(filePath);
+//   const reader = file.stream().getReader();
 
-  let fileData = new Uint8Array();
-  let done = false;
+//   let fileData = new Uint8Array();
+//   let done = false;
 
-  while (!done) {
-    const { done: doneReading, value } = await reader.read();
-    if (doneReading) {
-      done = true;
-    } else {
-      fileData = new Uint8Array([...fileData, ...value]);
-    }
-  }
+//   while (!done) {
+//     const { done: doneReading, value } = await reader.read();
+//     if (doneReading) {
+//       done = true;
+//     } else {
+//       fileData = new Uint8Array([...fileData, ...value]);
+//     }
+//   }
 
-  fileStream.write(fileData);
-  fileStream.end();
-  const tobaccoPermitUrl = '/uploads/'+String(businessName).toLowerCase()+'-tobacco-permit.png'
-  
+//   fileStream.write(fileData);
+//   fileStream.end();
+//   const tobaccoPermitUrl = '/uploads/'+String(businessName).toLowerCase()+'-tobacco-permit.png'
+  const tobaccoPermitUrl = ''
   // const email = formData.get("email");
   // const phoneNumber = formData.get("phone");
   // const taxPayerId = formData.get("taxpayerid")
