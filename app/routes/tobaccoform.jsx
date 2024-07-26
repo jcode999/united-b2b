@@ -6,7 +6,8 @@ import "../custom-css/custom-form.css"
 
 import fs from 'fs';
 import path from 'path';
-
+import "bootstrap/dist/css/bootstrap.min.css"
+import "./FormStyles.css"
 
 
 
@@ -15,58 +16,84 @@ export default function CustomForm() {
   
   return (
     <div className="custom-form-container-wrapper" >
-      <div class="form-container">
+    <div className="form-container">
       
-      <Form  method="post"  action = '/apps/proxy'encType="multipart/form-data">
-
-        <div className="form-group">
-          <label htmlFor="firstName">First Name:</label>
-          <input type="text" id="firstName" name="firstName" required />
+    <Form  method="post"  action = '/apps/proxy'encType="multipart/form-data">
+        {/*--------------------------------Personal Details---------------------------------------------------------------------------*/}
+    <div style={{'marginTop':'2em'}}>
+        <h3 style={{'fontFamily':'"DM Sans", sans-serif;','letterSpacing':'-.02em','margin':'0 0 2.4rem'}}>Personal Details</h3>
+        <div className="row">
+            <div className="col">
+                <label htmlFor="firstName">First Name</label>
+                <input id="firstName" type="text" className="form-control" placeholder="First name"/>
+            </div>
+            <div className="col">
+                <label htmlFor="lastName">Last Name</label>
+                <input id= "lastName" type="text" className="form-control" placeholder="Last name"/>
+            </div>
         </div>
-        <div class="form-group">
-          <label htmlFor="lastname">Last Name</label>
-          <input type="text" id="lastname" name="lastname" required />
+        <div className="form-row">
+            <div className="form-group col-md-6">
+                <label htmlFor="inputEmail4">Email</label>
+                <input type="email" className="form-control" id="email" placeholder="Email"/>
+            </div>
+            <div className="form-group col-md-6">
+            <label htmlFor="phoneNumber">Phone Number</label>
+            <input type="phone" className="form-control" id="phoneNumber" placeholder=""/>
+            </div>
         </div>
-        <div class="form-group">
-          <label htmlFor="businessName">Business Name</label>
-          <input type="text" id="businessName" name="businessName" required />
+    </div>
+{/*--------------------------------Business Details---------------------------------------------------------------------------*/}
+    <div style={{'marginTop':'2em'}}>
+        <h3 style={{'fontFamily':'"DM Sans", sans-serif;','letterSpacing':'-.02em','margin':'0 0 2.4rem'}}>Business Details</h3>
+        <div className="form-group col-md-6">
+            <label htmlFor="inputAddress">Business Name</label>
+            <input type="text" className="form-control" id="businessName" placeholder="My Business."/>
         </div>
-        
-        <div class="form-group">
-            <label htmlFor="tobaccopermit">Tobacco Permit</label>
-            <input type="file" id="tobaccopermit" name="tobaccopermit" required/>
+        <div className="form-group col-md-6">
+            <label htmlFor="businessAddress1">Address</label>
+            <input type="text" className="form-control" id="businessAddress1" placeholder="1234 Main St"/>
         </div>
-        {/* 
-
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" required />
+        <div className="form-group col-md-6">
+            <label htmlFor="businessAddress2">Address 2</label>
+            <input type="text" className="form-control" id="businessAddress2" placeholder="Apartment, studio, or floor"/>
         </div>
-
-        <div class="form-group">
-            <label htmlFor="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" required/>
+        <div className="form-row">
+            <div className="form-group col-md-6">
+            <label htmlFor="city">City</label>
+            <input type="text" className="form-control" id="city"/>
+            </div>
+            <div className="form-group col-md-4">
+            <label htmlFor="state">State</label>
+            <select id="state" className="form-control">
+                <option selected>Choose...</option>
+                <option>...</option>
+            </select>
+            </div>
+            <div className="form-group col-md-2">
+            <label htmlFor="zip">Zip</label>
+            <input type="text" className="form-control" id="zip"/>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label htmlFor="taxpayerid">Tax Payer ID</label>
-            <input type="text" id="taxpayerid" name="taxpayerid" required/>
+    </div>
+{/*-----------------------------------Permits and Licenses*/}   
+    <div style={{'marginTop':'2em'}}>
+        <h3 style={{'fontFamily':'"DM Sans", sans-serif;','letterSpacing':'-.02em','margin':'0 0 2.4rem'}}>Licenses and Permits</h3>
+        <div className="form-group mb-3">
+                <div className="mb-3">
+                    <label htmlFor="tobaccoPermit" className="form-label">Tobacco Permit</label>
+                    <input className="form-control" type="file" id="tobaccoPermit"/>
+                </div>
         </div>
-
-       
-
-        <div class="form-group">
-            <label htmlFor="ecigpermit">E-Cigarette Permit</label>
-            <input type="file" id="ecigpermit" name="ecigpermit" required/>
-        </div> */}
-
-        
-
-        {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
-        
-        <div class="form-group">
-            <button type="submit">Submit</button>
+        <div className="form-group mb-3">
+                <div className="mb-3">
+                    <label htmlFor="ecigsPermit" className="form-label">Ecigs Permit</label>
+                    <input className="form-control" type="file" id="ecigsPermit"/>
+                </div>
         </div>
+    </div>
+
+        <button type="submit" className="btn btn-primary">Submit</button>
       </Form>
       </div>
       
