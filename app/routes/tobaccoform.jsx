@@ -6,7 +6,7 @@ import "../custom-css/custom-form.css"
 
 import fs from 'fs';
 import path from 'path';
-import "bootstrap/dist/css/bootstrap.min.css"
+// import "bootstrap/dist/css/bootstrap.min.css"
 
 
 
@@ -107,7 +107,7 @@ export async function action({ request }) {
   const firstName = formData.get("firstName");
   const lastName = formData.get("lastname");
   const businessName = formData.get("businessName")
-  const file = formData.get('tobaccopermit');
+  const file = formData.get('tobaccoPermit');
   const uploadPath = path.join(process.cwd(), 'public/uploads');
 
   if (!fs.existsSync(uploadPath)) {
