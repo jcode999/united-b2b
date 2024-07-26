@@ -18,7 +18,7 @@ export default function CustomForm() {
     <div className="custom-form-container-wrapper" >
     <div className="form-container">
       
-    <Form  method="post"  action = '/apps/proxy'encType="multipart/form-data">
+    <Form  style = {{'fontSize':'12px','color':'white'}}method="post"  action = '/apps/proxy'encType="multipart/form-data">
         {/*--------------------------------Personal Details---------------------------------------------------------------------------*/}
     <div style={{'marginTop':'2em'}}>
         <h3 style={{'fontFamily':'"DM Sans", sans-serif;','letterSpacing':'-.02em','margin':'0 0 2.4rem'}}>Personal Details</h3>
@@ -39,7 +39,7 @@ export default function CustomForm() {
             </div>
             <div className="form-group col-md-6">
             <label htmlFor="phoneNumber">Phone Number</label>
-            <input type="phone" className="form-control" id="phoneNumber" placeholder=""/>
+            <input type="phone" className="form-control" id="phoneNumber" placeholder="(888)-123-1231"/>
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@ export async function action({ request }) {
   
   const formData = await request.formData();
   const firstName = formData.get("firstName");
-  const lastName = formData.get("lastname");
+  const lastName = formData.get("lastName");
   const businessName = formData.get("businessName")
   const file = formData.get('tobaccoPermit');
   const uploadPath = path.join(process.cwd(), 'public/uploads');
@@ -159,7 +159,7 @@ export async function action({ request }) {
   });
  
   
-  return redirect(`https://united-wholesale.com/pages/contact/`);
+  return redirect(`https://united-wholesale.com/pages/confirmation-page`);
   
   
 }
