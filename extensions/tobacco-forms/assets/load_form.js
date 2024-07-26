@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("-------------------------------------------------------")
     console.log("fetching page: tobaccoform")
     // const url = vite.import.env.SHOPIFY_APP_URL + '/tobaccoform'
-    const url = "https://custom-codes.com/tobaccoform"
+    const url = "https://custom-codes/tobaccoform"
     fetch(url)
       .then(response => response.text())
       .then(html => {

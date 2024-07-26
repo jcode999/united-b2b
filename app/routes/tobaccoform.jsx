@@ -7,7 +7,7 @@ import "../custom-css/custom-form.css"
 import fs from 'fs';
 import path from 'path';
 import "bootstrap/dist/css/bootstrap.min.css"
-import "./FormStyles.css"
+
 
 
 
@@ -159,7 +159,7 @@ export async function action({ request }) {
   });
  
   
-  return redirect(`https://jigme-store-dev.myshopify.com/`);
-  // return {status:'200'}
+  return redirect(`https://united-wholesale.com/pages/contact/`);
+  
   
 }
