@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("going to post data")
     const formData = new FormData(form);
     const salesAndUseTaxPermitNumber = formData.get("salesAndUseTaxPermitNumber");
-    
+
     if (!isValidPermitNumber(salesAndUseTaxPermitNumber)) {
       permitNumberError.style.display = 'block';
       return;
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => {
       console.log(response)
       if(response.ok){
-        window.location.href = "https://jigme-store-dev.myshopify.com/cart";
+        window.location.href = "https://united-wholesale.com/pages/confirmation-page";
       }
       else{
         permitNumberError.textContent = response.error;
