@@ -35,6 +35,15 @@ CREATE TABLE "TobaccoForm" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "phoneNumber" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "businessName" TEXT NOT NULL,
+    "businessAddress1" TEXT NOT NULL,
+    "businessAddress2" TEXT NOT NULL,
+    "businessCity" TEXT NOT NULL,
+    "businessState" TEXT NOT NULL,
+    "businessZip" TEXT NOT NULL,
+    "salesAndUseTaxPermitNumber" TEXT NOT NULL,
+    "tobaccoPermitNumber" TEXT NOT NULL,
     "tobaccoPermitUrl" TEXT NOT NULL
 );
