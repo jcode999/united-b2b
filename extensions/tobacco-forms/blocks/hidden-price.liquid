@@ -1,12 +1,8 @@
 {% comment %} {% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value | round %} {% endcomment %}
-{% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value %}
 <div width="30">
-<span style="color:black">
-  {% comment %} {%  if customer %}
-  <p>Price: {{ product.price | money }}</p>
-  {% endif %} {% endcomment %}
+<span style="color:white">
    
-  {% render 'hidden-price', rating: avg_rating %}
+  {% render 'hidden-price' %}
   
 </span>
 

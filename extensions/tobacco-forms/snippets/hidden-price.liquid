@@ -1,7 +1,7 @@
 {% if customer %}
-    <p>Price: {{ product.price | money }}</p>
+    <span style="color:white;">Price: {{ product.price | money }}</span>
   
   {% else %}
-  <p> Login required to view prices.</p>
+  <span> Login required to view prices.</span>
   <a href='https://united-wholesale.com/pages/wholesale-form'>Create an account.</a>
   {% endif %}
