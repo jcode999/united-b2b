@@ -53,21 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
     })
-    // .then(data => {
-    //   console.log("data recieved from server: ",data)
-    //   if (data.error) {
-    //     console.log(data.error);
-    //     permitNumberError.textContent = data.error;
-    //     permitNumberError.style.display = 'block';
-    //   } else {
-    //     window.location.href = "https://jigme-store-dev.myshopify.com/";
-    //   }
-    // })
-    // .catch(error => {
-    //   permitNumberError.textContent = 'Failed to submit the form. Please try again later.';
-    //   permitNumberError.style.display = 'block';
-      
-    // });
   });
 });
 

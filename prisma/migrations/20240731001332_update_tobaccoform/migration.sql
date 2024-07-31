@@ -45,5 +45,8 @@ CREATE TABLE "TobaccoForm" (
     "businessZip" TEXT NOT NULL,
     "salesAndUseTaxPermitNumber" TEXT NOT NULL,
     "tobaccoPermitNumber" TEXT NOT NULL,
-    "tobaccoPermitUrl" TEXT NOT NULL
+    "tobaccoPermitExpirationDate" DATETIME NOT NULL,
+    "tobaccoPermitUrl" TEXT NOT NULL,
+    "approved" BOOLEAN NOT NULL DEFAULT false,
+    "shopifyAccountId" TEXT NOT NULL DEFAULT ''
 );
