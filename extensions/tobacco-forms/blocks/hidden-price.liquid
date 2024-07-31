@@ -1,0 +1,30 @@
+{% comment %} {% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value | round %} {% endcomment %}
+{% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value %}
+<div width="30">
+<span style="color:black">
+  {% comment %} {%  if customer %}
+  <p>Price: {{ product.price | money }}</p>
+  {% endif %} {% endcomment %}
+   
+  {% render 'hidden-price', rating: avg_rating %}
+  
+</span>
+
+</div>
+{% comment %} {% if avg_rating >= 4 %}
+  <br>
+  <img src="{{ "thumbs-up.png" | asset_img_url: '15x' }}" height="15" width="15" loading="lazy">
+  {{ 'ratings.home.recommendationText' | t }}
+{% endif %} {% endcomment %}
+
+{% schema %}
+{
+  "name": "Hidden Price",
+  "target": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "product", "autofill": true },
+    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#000000" }
+  ]
+}
+{% endschema %}
+
