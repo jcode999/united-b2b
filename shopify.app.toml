@@ -19,14 +19,14 @@ scopes = "read_products,write_customers"
 redirect_urls = [
   "https://custom-codes.com/auth/callback",
   "https://custom-codes.com/auth/shopify/callback",
-  "https://custom-codes..com/api/auth/callback"
+  "https://custom-codes.com/api/auth/callback"
 ]
 
 [webhooks]
 api_version = "2024-07"
 
 [app_proxy]
-url = "https://custom-codes.com/tobaccoform"
+url = "https://imposed-noble-conservation-systematic.trycloudflare.com/tobaccoform"
 subpath = "proxy"
 prefix = "apps"
 

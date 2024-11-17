@@ -16,7 +16,7 @@ export async function loader({ request, params }) {
     return json(await getTobaccoForm(Number(params.id)))
 }
 export async function action({ request, params }) {
-    console.log("request to create customer received.")
+    console.log("[action] creating customer.")
 
     const { admin } = await authenticate.admin(request);
     const data = {
@@ -88,10 +88,10 @@ export default function TobaccoForm() {
                 <Grid.Cell columnSpan={{ xs: 6, sm: 3, md: 3, lg: 6, xl: 6 }}>
                     <Card title="Orders" sectioned>
                         <p style={{ 'fontWeight': 'bold' }}>Submitted Tobacco Documents</p>
-                        {form.tobaccoPermitNumber && <div style={detailStyles}>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Tobacco Permit Number:</span> <span>{form.tobaccoPermitNumber}</span>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Tobacco Permit Expiration Date:</span> <span>{expirationDate.toDateString()}</span>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Permit Image</span><img alt="tobaccoPermitImage" src={`/uploads/${form.businessName.toLowerCase()}-tobacco-permit.png`}></img>
+                        {   form.tobaccoPermitNumber && <div style={detailStyles}>
+                                <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Tobacco Permit Number:</span> <span>{form.tobaccoPermitNumber}</span>
+                                <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Tobacco Permit Expiration Date:</span> <span>{expirationDate.toDateString()}</span>
+                                <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Permit Image</span><img alt="tobaccoPermitImage" src={`/uploads/${form.businessName.toLowerCase()}-tobacco-permit.png`}></img>
                         </div>}
                     </Card>
                 </Grid.Cell>

@@ -35,6 +35,16 @@ export default function CustomForm() {
 }
 
 export async function action({ request }) {
+  if (request.method === "GET") {
+    // Handle GET request
+    try {
+      const tobaccoForms = await db.tobaccoForm.findMany(); // Fetch all records
+      return json(tobaccoForms, { status: 200 });
+    } catch (error) {
+      console.error("Failed to fetch tobacco forms.", error);
+      return json({ error: "Failed to fetch tobacco forms" }, { status: 500 });
+    }
+  }
   const formData = await request.formData();
   const formObject = Object.fromEntries(formData.entries());
   const serializableFormObject = {};
