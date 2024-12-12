@@ -1,0 +1,12 @@
+<span style="color:{{ block.settings.colour }}">
+    {% render 'custom-variant-picker' %}
+  </span>
+{% schema %}
+{
+  "name": "Custom Variant Picker",
+  "target": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "product", "autofill": true },
+  ]
+}
+{% endschema %}

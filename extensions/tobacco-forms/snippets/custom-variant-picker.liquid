@@ -1,0 +1,7 @@
+{% for var in product.variants %}
+    {{var.title}}
+    <form method="post" action="/cart/add">
+        <input name="id" value="{{ var.id }}" type="hidden" />
+        <input name="add" value="ORDER NOW" type="submit" />
+      </form>
+{% endfor %}
