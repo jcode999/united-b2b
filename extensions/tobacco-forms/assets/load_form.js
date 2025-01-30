@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  console.log("here")
+  
   const form = document.getElementById('customForm');
   const permitNumberInput = document.getElementById('salesAndUseTaxPermitNumber');
   const permitNumberError = document.getElementById('salesAndUseTaxPermitNumberError');

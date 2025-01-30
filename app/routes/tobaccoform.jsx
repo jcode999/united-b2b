@@ -1,11 +1,24 @@
-import { json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { json } from "@remix-run/node";
+
 import db from "../db.server"; // Make sure to set up db.server.js to export Prisma client instance
 import "../custom-css/custom-form.css"
 import fs from 'fs';
 import path from 'path';
-import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+
+import { authenticate } from "../shopify.server";
+const API_KEY = process.env.SHOPIFY_API_KEY || "my-secret-api-key";
+const syncPriceTool = async ()=>{
+  console.log("syncing pricetool.....")
+  fetch('http://localhost:8000/api/price-tool/sync/')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => console.log(data))
+  .catch(error => console.error('Error fetching data:', error));
+}
 const handleFileUpload = async (tobaccoPermitFile,filePath)=>{
   
   const fileStream = fs.createWriteStream(filePath);
@@ -28,22 +41,47 @@ const handleFileUpload = async (tobaccoPermitFile,filePath)=>{
   
 }
 
-export default function CustomForm() {
-  return (
-    <></>
-  );
+// export default function CustomForm() {
+//   return (
+//     <></>
+//   );
+// }
+export async function loader({request}){
+  console.log("loader function [tobacco form]",request)
+  // const { admin } = await authenticate.admin(request);
+  // if (admin){
+  //   console.log("you are authenticated")
+  // }
+  const apiKey = request.headers.get("SHOPIFY_API_KEY");
+  
+  if (!apiKey || apiKey !== API_KEY) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  try {
+    const tobaccoForms = await db.tobaccoForm.findMany(); // Fetch all records
+    
+    
+    return json(tobaccoForms, { status: 200 });
+  } catch (error) {
+    console.error("Failed to fetch tobacco forms.", error);
+    return json({ error: "Failed to fetch tobacco forms" }, { status: 500 });
+  }
+  
 }
-
 export async function action({ request }) {
+  console.log("request received for tobacco forms")
   if (request.method === "GET") {
     // Handle GET request
     try {
       const tobaccoForms = await db.tobaccoForm.findMany(); // Fetch all records
+      
+      console.log("here")
       return json(tobaccoForms, { status: 200 });
     } catch (error) {
       console.error("Failed to fetch tobacco forms.", error);
       return json({ error: "Failed to fetch tobacco forms" }, { status: 500 });
     }
+    
   }
   const formData = await request.formData();
   const formObject = Object.fromEntries(formData.entries());

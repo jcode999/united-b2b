@@ -1,7 +1,99 @@
-{% for var in product.variants %}
-    {{var.title}}
-    <form method="post" action="/cart/add">
-        <input name="id" value="{{ var.id }}" type="hidden" />
-        <input name="add" value="ORDER NOW" type="submit" />
-      </form>
-{% endfor %}
+{% comment %}
+	{% for var in product.variants %}
+	    {{var.title}}
+	    <form method="post" action="/cart/add">
+	        <input name="id" value="{{ var.id }}" type="hidden" />
+	        <input name="add" value="ORDER NOW" type="submit" />
+	      </form>
+	{% endfor %}
+{% endcomment %}
+
+{% assign product = product %}
+<!-- Ensure 'product' is defined -->
+{% comment %} {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %} {% endcomment %}
+{% comment %} <div class="grid__item product__media-wrapper">
+  {% render 'product-media-gallery', variant_images: variant_images %}
+</div> {% endcomment %}
+<div class='product-variants'>
+	<h2>{{ product.title }}</h2>
+  <ul>
+	{% for variant in product.variants %}
+		<div class='variant'>
+				<li class='variant-row'>
+					{% if variant.image %}
+						<img
+							src='https://cdn.shopify.com/s/files/1/0708/5627/8266/{{ variant.image.src | image_url: '50x50' }}'
+							width='50px'
+							height='50px'
+							alt='{{ variant.title }}'
+						>
+					{% else %}
+						<p>No image available for this variant.</p>
+					{% endif %}
+					<p>
+						<strong>{{ variant.title }}</strong>
+						{% if variant.available %}
+							<span>(In Stock)</span>
+						{% else %}
+							<span>(Out of Stock)</span>
+						{% endif %}
+					</p>
+
+					{% if variant.available %}
+						<div class='variant-form'>
+							<label for='quantity-{{ variant.id }}'>Quantity:</label>
+							<input
+								type='number'
+								id='quantity-{{ variant.id }}'
+								name='quantity'
+								min='1'
+								value='1'
+							>
+							<button
+								type='button'
+								class='btn btn-add-to-cart'
+								data-variant-id='{{ variant.id }}'
+								data-quantity-id='quantity-{{ variant.id }}'
+							>
+								Add to Cart
+							</button>
+						</div>
+					{% else %}
+						<p>This variant is currently out of stock.</p>
+					{% endif %}
+				</li>
+			
+		</div>
+	{% endfor %}
+</ul>
+</div>
+
+<script src='{{ 'custom_add_to_cart.js' | asset_url}}' defer></script>
+{% comment %} {%- if product.media.size > 0 -%}
+  <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
+{%- endif -%} {% endcomment %}
+<style>
+	.product-variants {
+		margin: 20px 0;
+	}
+	.variant {
+		margin-bottom: 15px;
+	}
+	.btn-add-to-cart {
+		background-color: #008060;
+		color: white;
+		border: none;
+		padding: 10px 15px;
+		cursor: pointer;
+	}
+	.btn-add-to-cart:hover {
+		background-color: #005f46;
+	}
+  .variant-row{
+    display:flex;
+    align-items:center;
+  }
+</style>
+
+

@@ -5,6 +5,14 @@
     },
     "home": {
       "recommendationText": "Recommended Product!"
+    },
+    "products": {
+    "product": {
+      "quantity": {
+        "label": "Quantity"
+      }
     }
+  }
+
   }
 }

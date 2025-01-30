@@ -1,7 +1,7 @@
 import {
     Card,
     Page,
-    Badge,
+    
     Grid,
 
 
@@ -12,19 +12,19 @@ import { getTobaccoForm, createCustomer } from "../models/TobaccoForm.server"
 import { authenticate } from "../shopify.server";
 import { json } from "@remix-run/node";
 export async function loader({ request, params }) {
-    console.log("request recieved for ", params.id)
+    console.log("request recieved for ", request)
     return json(await getTobaccoForm(Number(params.id)))
 }
 export async function action({ request, params }) {
     console.log("[action] creating customer.")
-
+    console.log("request: ",request)
     const { admin } = await authenticate.admin(request);
     const data = {
         ...Object.fromEntries(await request.formData()),
     };
     const customer = await createCustomer(data, admin.graphql)
 
-    console.log(customer)
+    console.log("created customer: ",customer)
     return customer
 }
 
