@@ -111,7 +111,8 @@ export async function action({ request }) {
       to:"contact@united-wholesale.com",
       subject:"Account Creation Request Received",
       text:"",
-      customerName:creationResponse['firstName'] + ' ' +creationResponse['lastName']
+      customerName:creationResponse['firstName'] + ' ' +creationResponse['lastName'],
+      id:creationResponse['id']
     })
     if (emailResult.success) {
       console.log("email sent succesfully")

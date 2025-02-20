@@ -6,9 +6,10 @@ interface SendEmailParams {
   text: string;
   html?:string,
   customerName:string,
+  id:string,
 }
 
-export async function sendEmail({ to, subject, text, html,customerName }: SendEmailParams) {
+export async function sendEmail({ to, subject, text, html,customerName,id }: SendEmailParams) {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port:465,
@@ -19,7 +20,7 @@ export async function sendEmail({ to, subject, text, html,customerName }: SendEm
     }
   });
  
-  const testLink = 'https://admin.shopify.com/store/jigme-store-dev/apps/united-b2b/app/tobaccoform/14'
+  const formLink = `https://admin.shopify.com/store/6dcd6a/apps/united-b2b/app/tobaccoform/${String(id)}`
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to,
@@ -28,7 +29,7 @@ export async function sendEmail({ to, subject, text, html,customerName }: SendEm
     html:`
       <h1>Account Creation Reuest from ${customerName}!</h1>
       <p>Click the link to view details.</p>
-      <a href=${testLink}>${testLink}</a>
+      <a href=${formLink}>${formLink}</a>
       <p>If the link doesn't work, copy and paste the URL into your browser.</p>
     `,
   };
