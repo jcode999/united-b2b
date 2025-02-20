@@ -15,7 +15,7 @@ function displayStrings(data, delayBetweenStrings = 2000) {
         textContainer.innerHTML = ''; // Clear previous string
         iconContainer.src = ''; // Clear previous icon
         iconContainer.classList.remove('visible'); // Hide the icon
-        console.log("app text: ",text)
+        
         // Add characters with animation
         text.split('').forEach((char, index) => {
             const span = document.createElement('span');

@@ -1,7 +1,7 @@
 import {
     Card,
     Page,
-    
+
     Grid,
 
 
@@ -11,20 +11,21 @@ import { getTobaccoForm, createCustomer } from "../models/TobaccoForm.server"
 
 import { authenticate } from "../shopify.server";
 import { json } from "@remix-run/node";
+import '../custom-css/app.css'
 export async function loader({ request, params }) {
     console.log("request recieved for ", request)
     return json(await getTobaccoForm(Number(params.id)))
 }
 export async function action({ request, params }) {
     console.log("[action] creating customer.")
-    console.log("request: ",request)
+    console.log("request: ", request)
     const { admin } = await authenticate.admin(request);
     const data = {
         ...Object.fromEntries(await request.formData()),
     };
     const customer = await createCustomer(data, admin.graphql)
 
-    console.log("created customer: ",customer)
+    console.log("created customer: ", customer)
     return customer
 }
 
@@ -59,16 +60,19 @@ export default function TobaccoForm() {
 
         <Page fullWidth
             title="Customer Details">
-            
+
             <Grid>
 
                 <Grid.Cell columnSpan={{ xs: 6, sm: 3, md: 3, lg: 6, xl: 6 }}>
                     <Card>
-                        <p style={{ 'fontWeight': 'bold' }}>Personal Details</p>
+                        <div className="detail-heading">
+                            <h4 style={{ 'fontWeight': 'bold' }}>Personal Details</h4>
+                        </div>
+
                         <div style={detailStyles}>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Name:</span> <span>{fullName}</span>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Email:</span> <span>{form.email}</span>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Phone:</span> <span>{form.phoneNumber}</span>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Name:</span> <span>{fullName}</span>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Email:</span> <span>{form.email}</span>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Phone:</span> <span>{form.phoneNumber}</span>
                         </div>
 
 
@@ -76,41 +80,46 @@ export default function TobaccoForm() {
                 </Grid.Cell>
                 <Grid.Cell columnSpan={{ xs: 6, sm: 3, md: 3, lg: 6, xl: 6 }}>
                     <Card title="Orders" sectioned>
-                        <p style={{ 'fontWeight': 'bold' }}>Business Details</p>
+                    <div className="detail-heading">
+                            <h4 style={{ 'fontWeight': 'bold' }}>Business Details</h4>
+                        </div>
                         <div style={detailStyles}>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Business Name:</span> <span>{form.businessName}</span>
-                            <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Address1:</span> <span>{form.businessAddress1}</span>
-                            <span style={{ 'marginTop': '0.25em' }}>{form.businessCity},{form.businessState},{form.businessZip}</span>
+                        <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Sales and Use Tax ID:</span> <span>{form.salesAndUseTaxPermitNumber}</span>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Business Name:</span> <span>{form.businessName}</span>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Address1:</span> <span>{form.businessAddress1}</span>
+                            <span >{form.businessCity},{form.businessState},{form.businessZip}</span>
                         </div>
                     </Card>
                 </Grid.Cell>
 
                 <Grid.Cell columnSpan={{ xs: 6, sm: 3, md: 3, lg: 6, xl: 6 }}>
                     <Card title="Orders" sectioned>
-                        <p style={{ 'fontWeight': 'bold' }}>Submitted Tobacco Documents</p>
-                        {   form.tobaccoPermitNumber && <div style={detailStyles}>
-                                <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Tobacco Permit Number:</span> <span>{form.tobaccoPermitNumber}</span>
-                                <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Tobacco Permit Expiration Date:</span> <span>{expirationDate.toDateString()}</span>
-                                <span style={{ 'fontWeight': 'bold', 'marginTop': '0.25em' }}>Permit Image</span><img alt="tobaccoPermitImage" src={`/uploads/${form.businessName.toLowerCase()}-tobacco-permit.png`}></img>
+                    <div className="detail-heading">
+                            <h4 style={{ 'fontWeight': 'bold' }}>Tobacco License</h4>
+                        </div>
+                        {form.tobaccoPermitNumber && <div style={detailStyles}>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Tobacco Permit Number:</span> <span>{form.tobaccoPermitNumber}</span>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Tobacco Permit Expiration Date:</span> <span>{expirationDate.toDateString()}</span>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Permit Image</span><img alt="tobaccoPermitImage" src={`/uploads/${form.businessName.toLowerCase()}-tobacco-permit.png`}></img>
                         </div>}
                     </Card>
                 </Grid.Cell>
 
             </Grid>
-            
 
-            <div style={{'marginBottom':'9em'}}>
+
+            <div style={{ 'marginBottom': '9em' }}>
                 <button style={
                     {
                         'background': 'black',
                         'color': 'white',
                         'width': '8em',
-                        'height': '2em',
+                        'height': '4em',
                         'border': 'none',
-                        'borderRadius': '10px',
-                        
-                        
-                        
+                        'borderRadius': '8px',
+
+
+
                     }}
                     onClick={handleCreate} >Approve</button>
             </div>

@@ -17,9 +17,9 @@ scopes = "read_products,write_customers"
 
 [auth]
 redirect_urls = [
-  "https://https://custom-codes.com/auth/callback",
-  "https://https://custom-codes.com/auth/shopify/callback",
-  "https://https://custom-codes.com/api/auth/callback"
+  "https://custom-codes.com/auth/callback",
+  "https://custom-codes.com/auth/shopify/callback",
+  "https://custom-codes.com/api/auth/callback"
 ]
 
 [webhooks]

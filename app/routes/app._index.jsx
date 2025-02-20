@@ -28,8 +28,10 @@ export async function loader({ request, params }) {
 export default function TobaccoForms() {
 
   const forms = useLoaderData();
+  
   const navigate = useNavigate();
-
+  
+  
 
 
   return (
@@ -40,7 +42,7 @@ export default function TobaccoForms() {
           resourceName={{ singular: 'app-customer', plural: 'app-customers' }}
           items={forms}
           renderItem={(item) => {
-            const { firstName, lastName, id, businessName, tobaccoPermitNumber } = item;
+            const { firstName, lastName, id, businessName, tobaccoPermitNumber,approved } = item;
             const fullName = `${firstName} ${lastName}`
             const media = <Avatar customer size="md" name={`${firstName} ${lastName}`} />;
 
@@ -56,6 +58,7 @@ export default function TobaccoForms() {
                     {fullName}
                   </Text>
                   {tobaccoPermitNumber && <Badge tone="success">Tobacco Permit </Badge>}
+                  {approved && <Badge tone="success">Approved</Badge>}
 
                 </div>
 

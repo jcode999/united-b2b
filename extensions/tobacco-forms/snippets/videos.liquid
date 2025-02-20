@@ -1,0 +1,81 @@
+<section class="shorts-container">
+    <div class="shorts">
+        <div class="short">
+            {{ block.settings.video1
+                | video_tag:
+                  image_size: "1300x",
+                  autoPlay: true,
+                  muted: true,
+                  controls:false,
+                  loop:true,
+                  playsInline:true          
+            }}
+        
+        </div>
+    </div>
+</section>
+
+
+<style>
+    .shorts-container {
+        width: 100%;
+        height: 640px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        background: #000;
+    }
+    .shorts {
+        display: flex;
+        flex-direction: row;
+        transition: transform 0.5s ease;
+    }
+    .short {
+        width: 360px;
+        height: 100%;
+        position: relative;
+        margin: 0 10px;
+    }
+    .short video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .controls {
+        position: absolute;
+        bottom: 20px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .control-btn {
+        background: rgba(255, 255, 255, 0.8);
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        text-decoration: none;
+        color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<script>
+    
+    let currentIndex = 0;
+    const shortsContainer = document.querySelector('.shorts-container');
+    const shorts = document.querySelector('.shorts');
+    const shortElements = document.querySelectorAll('.short');
+
+    shortsContainer.addEventListener('wheel', (e) => {
+        if (e.deltaY > 0 && currentIndex < shortElements.length - 1) {
+            currentIndex++;
+        } else if (e.deltaY < 0 && currentIndex > 0) {
+            currentIndex--;
+        }
+        shorts.style.transform = `translateX(-${currentIndex * 370}px)`;
+    });
+</script>
