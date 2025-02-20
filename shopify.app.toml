@@ -32,3 +32,4 @@ prefix = "apps"
 
 [pos]
 embedded = false
+
