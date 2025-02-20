@@ -64,7 +64,7 @@ export async function action({ request }) {
     try {
       const tobaccoForms = await db.tobaccoForm.findMany(); // Fetch all records
       
-      console.log("here")
+      
       return new Response(JSON.stringify(tobaccoForms, { status: 200 }));
     } catch (error) {
       console.error("Failed to fetch tobacco forms.", error);
@@ -108,9 +108,11 @@ export async function action({ request }) {
     });
     console.log("creating response: ",creationResponse)
     const emailResult = sendEmail({
-      to:"jimmeysherpa@gmail.com",
-      subject:"email from remix app",
-      text:"it works!!!"})
+      to:"contact@united-wholesale.com",
+      subject:"Account Creation Request Received",
+      text:"",
+      customerName:creationResponse['firstName'] + ' ' +creationResponse['lastName']
+    })
     if (emailResult.success) {
       console.log("email sent succesfully")
     } else {

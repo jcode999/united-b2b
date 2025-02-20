@@ -82,7 +82,7 @@ export default function TobaccoForms() {
           resourceName={{ singular: 'app-customer', plural: 'app-customers' }}
           items={displayedData}
           renderItem={(item) => {
-            const { firstName, lastName, id, businessName, tobaccoPermitNumber, approved } = item;
+            const { firstName, lastName, id, businessName, tobaccoPermitNumber } = item;
             const fullName = `${firstName} ${lastName}`
             const media = <Avatar customer size="md" name={`${firstName} ${lastName}`} />;
 
