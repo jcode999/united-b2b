@@ -2,3 +2,14 @@
     padding:1em 0;
     border-bottom: 1px solid gray;
 }
+.btn{
+    background: rgb(59, 59, 59);
+    color: white;
+    width: 6em;
+    height: 2.5em;
+    border: none;
+    border-radius: 8px;
+}
+.btn:hover{
+    background:black;
+}

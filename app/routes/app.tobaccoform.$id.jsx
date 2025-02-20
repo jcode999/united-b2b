@@ -1,19 +1,21 @@
 import {
     Card,
     Page,
-
+  
     Grid,
+    Banner,
+    Link,
 
 
 } from "@shopify/polaris";
-import { useLoaderData, useSubmit } from "@remix-run/react";
+import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { getTobaccoForm, createCustomer } from "../models/TobaccoForm.server"
-
+import { useEffect,useState } from 'react';
 import { authenticate } from "../shopify.server";
 import { json } from "@remix-run/node";
 import '../custom-css/app.css'
 export async function loader({ request, params }) {
-    console.log("request recieved for ", request)
+    // console.log("request recieved for ", request)
     return json(await getTobaccoForm(Number(params.id)))
 }
 export async function action({ request, params }) {
@@ -23,10 +25,11 @@ export async function action({ request, params }) {
     const data = {
         ...Object.fromEntries(await request.formData()),
     };
-    const customer = await createCustomer(data, admin.graphql)
+    const createResponse = await createCustomer(data, admin.graphql)
 
-    console.log("created customer: ", customer)
-    return customer
+    console.log("created customer: ", createResponse['customer'])
+    console.log("errors: ",createResponse['errors'])
+    return createResponse
 }
 
 export default function TobaccoForm() {
@@ -34,33 +37,86 @@ export default function TobaccoForm() {
     const fullName = `${form.firstName} ${form.lastName}`
     const expirationDate = new Date(form.tobaccoPermitExpirationDate);
     const submit = useSubmit();
+    const actionData = useActionData()
+
+    const [success,setSuccess] = useState(false)
+    const [errors,setErrors] = useState('')
+    const [showBanner,setShowBanner] = useState(false)
+
+    useEffect(() => {
+        console.log("action data: ", actionData)
+        if(!actionData){
+            return
+        }
+        if (actionData?.['customer']) {
+            setSuccess(true)
+            setErrors('')
+            
+        }
+        else{
+            setSuccess(false)
+            setErrors(actionData['errors'])
+
+        }
+        setShowBanner(true)
+    }, [actionData]);
+
+    useEffect(()=>{
+        console.log("errors:...")
+        console.log(errors)
+    },[errors])
+
     const detailStyles = {
         'display': 'flex',
         'flexDirection': 'column',
         'marginTop': '1em',
     }
+    // const [message,setMessage] = useState(null)
 
     const handleCreate = () => {
 
         submit(form, { method: 'post' })
     }
-    const action1 = {
-        content: 'Save',
-        disabled: true,
-        onAction: { handleCreate }
-    }
-    // const action2 = {
-    //     content: 'Save',
-    //     disabled: false,
-    //     onAction: { handleCreate }
-    // }
+   
 
 
     return (
 
         <Page fullWidth
-            title="Customer Details">
-
+            title="Customer Details"
+            primaryAction={{content: 'Approve', disabled: false, onAction: ()=>handleCreate()}}
+            >
+            
+            {showBanner && <div style={{'margin':'2em 0'}}>
+            {
+                success && errors==='' &&
+                 <Banner
+                title="Some of your product variants are missing weights"
+                tone="success"
+                // action={{content: 'View Customers Account', url: ''}}
+                // secondaryAction={{content: 'Learn more', url: ''}}
+                onDismiss={() => {setShowBanner(false)}}
+              >
+                <p>
+                  Customer Account has been succesfully created. Don't forget to send the activation link
+                </p>
+              </Banner>
+            }
+            {
+                !success && errors!=='' && <Banner
+                title="Failed to create customers account."
+                tone="warning"
+                // action={{content: 'View Customers Account', url: ''}}
+                // secondaryAction={{content: 'Learn more', url: ''}}
+                onDismiss={() => {setShowBanner(false)}}
+              >
+                <p>Reasons</p>
+                {
+                    errors.map((error,index)=>(<p key={index}>{error['message']}</p>))
+                }
+              </Banner>
+            }
+            </div>}
             <Grid>
 
                 <Grid.Cell columnSpan={{ xs: 6, sm: 3, md: 3, lg: 6, xl: 6 }}>
@@ -108,21 +164,7 @@ export default function TobaccoForm() {
             </Grid>
 
 
-            <div style={{ 'marginBottom': '9em' }}>
-                <button style={
-                    {
-                        'background': 'black',
-                        'color': 'white',
-                        'width': '8em',
-                        'height': '4em',
-                        'border': 'none',
-                        'borderRadius': '8px',
-
-
-
-                    }}
-                    onClick={handleCreate} >Approve</button>
-            </div>
+            
         </Page>
 
         // <div style={{'padding':'2em','background':'white'}}>

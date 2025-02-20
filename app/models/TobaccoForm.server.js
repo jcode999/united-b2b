@@ -82,8 +82,8 @@ export async function updateIsTobaccoCustomerMetaField(customerId,value,graphql)
 
 }
 export async function createCustomer(app_customer,graphql){
-  console.log("going to create customer in db...",app_customer)
-  console.log("app_customer: ",app_customer.firstName)
+  console.log("going to create customer in db...",app_customer.firstName)
+  
   try{
   const response = await graphql(
    ` mutation customerCreate($input: CustomerInput!) {
@@ -137,7 +137,7 @@ export async function createCustomer(app_customer,graphql){
   const responseBody = await response.json();
   if (responseBody.errors) {
     console.error("GraphQL errors:", responseBody.errors);
-    return null;
+    // return null;
   }
   const {
     data: {
@@ -146,7 +146,10 @@ export async function createCustomer(app_customer,graphql){
   } = responseBody;
   if (userErrors.length > 0) {
     console.error("User errors:", userErrors);
-    return null;
+    return {
+      'customer':null,
+      'errors':userErrors,
+    };
   }
 
   const new_app_customer = {
@@ -155,7 +158,10 @@ export async function createCustomer(app_customer,graphql){
   }
   updateTobaccoForm(Number(app_customer.id),new_app_customer)
   if(app_customer.tobaccoPermitUrl)
-  return customer;
+  return {
+    'customer':customer,
+    'errors':[]
+};
 }
 catch(error){
 console.log("error creating customer.",error)
