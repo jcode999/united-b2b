@@ -49,6 +49,7 @@ model TobaccoForm {
   lastName    String
   phoneNumber String
   email       String
+  validIdFileUrl String @default("")
 
   businessName     String
   businessAddress1 String
@@ -58,9 +59,11 @@ model TobaccoForm {
   businessZip      String
 
   salesAndUseTaxPermitNumber  String
+  salesAndUseTaxFileUrl       String @default("")
+
   tobaccoPermitNumber         String?
   tobaccoPermitExpirationDate DateTime?
-  tobaccoPermitUrl            String?
+  tobaccoPermitFileUrl            String?
 
   approved         Boolean? @default(false)
   shopifyAccountId String?  @default("")

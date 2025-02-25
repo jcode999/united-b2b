@@ -1,0 +1,250 @@
+{{ 'registration-form.css' | asset_url | stylesheet_tag }}
+<div style='display: flex; align-items: center; justify-content: center; background:white; width:100%'>
+	<div class='form-wrapper'>
+		<div class='promotion' style="display:none">
+			<!-- <h1>Intro</h1> -->
+			<img
+				src='https://cdn.shopify.com/s/files/1/0738/7919/1841/files/MMELT-GUMMIES-ONE_SHEETS-SOUR-ISLAND-TIKI.png?v=1740171460'
+				width='400px'
+				height='500px'
+			>
+		</div>
+
+		<form id='customForm' method='post' enctype='multipart/form-data'>
+			<div class='sections-container'>
+				<img
+					src='https://cdn.shopify.com/s/files/1/0738/7919/1841/files/UNITED_WEBSITE_LOGO_BLACK.svg?v=1695969375'
+					width='200px'
+					height='100px'
+				>
+				<div class='sections'>
+                    
+					<div class='form-section active'>
+                        
+						<div class='section-header'>
+							<h1>Personal Details</h1>
+							
+						</div>
+                        <p class='error-message' style='color: red; display: none;'>
+                            Please fill out all required fields.
+                        </p>
+
+						<div class='form-row'>
+							<div class='form-group'>
+								<input type='text' id='firstName' name='firstName' placeholder='' required>
+								<label for='firstName'>First Name</label>
+							</div>
+							<div class='form-group'>
+								<input type='text' id='lastName' name='lastName' placeholder='' required>
+								<label for='lastName'>Last Name</label>
+							</div>
+						</div>
+						<div class='form-row large'>
+							<div class='form-group'>
+								<input
+									type='email'
+									id='email'
+									name='email'
+									placeholder=''
+									class='large'
+									required
+								>
+								<label for='email'>Email</label>
+							</div>
+						</div>
+						<div class='form-row large'>
+							<div class='form-group'>
+								<input
+									type='number'
+									id='phoneNumber'
+									name='phoneNumber'
+									placeholder=''
+									class='large'
+									required
+								>
+								<label for='phoneNumber'>Phone Number</label>
+							</div>
+						</div>
+                        <div class='form-row'>
+							<div class='form-group'>
+								<input
+									class='large'
+									type='file'
+									id='validIdFile'
+									name='validIdFile'
+									placeholder=''
+                                    required
+								>
+								<label for='validIdFile'>Upload Valid ID</label>
+								<div id='fileError' class='error' style='display: none; color: red;'></div>
+							</div>
+							
+						</div>
+						
+					</div>
+					<div class='form-section'>
+                        <div class="section-header">
+                            <h1>Business Details</h1>
+                        </div>
+						
+                        <p class='error-message' style='color: red; display: none;'>
+                            Please fill out all required fields.
+                        </p>
+						<div class='form-row'>
+							<div class='form-group'>
+								<input
+									type='text'
+									id='businessName'
+									name='businessName'
+									placeholder=''
+									class='large'
+									required
+								>
+								<label for='businessName'>Business Name</label>
+							</div>
+						</div>
+						<div class='form-row large'>
+							<div class='form-group'>
+								<input
+									type='text'
+									id='businessAddress1'
+									name='businessAddress1'
+									placeholder=''
+									class='large'
+									required
+								>
+								<label for='businessAddress1'>Address 1</label>
+							</div>
+						</div>
+						<div class='form-row large'>
+							<div class='form-group'>
+								<input
+									type='text'
+									id='businessAddress2'
+									name='businessAddress2'
+									placeholder=''
+									class='large'
+								>
+								<label for='businessAddress2'>Address 2</label>
+							</div>
+						</div>
+						<div class='form-row large'>
+							<div class='form-group'>
+								<input
+									type='text'
+									id='businessCity'
+									name='businessCity'
+									placeholder=''
+									required
+								>
+								<label for='businessCity'>City</label>
+							</div>
+							<div class='form-group'>
+								<input
+									type='text'
+									id='businessState'
+									name='businessState'
+									placeholder=''
+									required
+								>
+								<label for='businessState'>State</label>
+							</div>
+							<div class='form-group'>
+								<input
+									type='text'
+									id='businessZip'
+									name='businessZip'
+									placeholder=''
+									required
+								>
+								<label for='businessZip'>Zip</label>
+							</div>
+						</div>
+						
+					</div>
+					<div class='form-section'>
+                        <div class="section-header">
+                            <h1>License and Permits</h1>
+                        </div>
+						
+						<div class='form-row large'>
+							<div class='form-group'>
+								<input
+									class='large'
+									type='text'
+									id='salesAndUseTaxPermitNumber'
+									name='salesAndUseTaxPermitNumber'
+									placeholder=''
+									required
+								>
+								<label for='salesAndUseTaxPermitNumber'>Sales And Use Permit Number</label>
+								
+							</div>
+						</div>
+                        <div class='form-row'>
+							<div class='form-group'>
+								<input
+									class='large'
+									type='file'
+									id='salesAndUseTaxFile'
+									name='salesAndUseTaxFile'
+									placeholder=''
+                                    required
+								>
+								<label for='salesAndUseTaxFile'>Upload Sales and Use Tax Permit</label>
+								<div id='fileError' class='error' style='display: none; color: red;'></div>
+							</div>
+							
+						</div>
+						<div class='form-row'>
+							<div class='form-group large'>
+								<input
+									class='large'
+									type='text'
+									id='tobaccoPermitNumber'
+									name='tobaccoPermitNumber'
+									placeholder=''
+								>
+								<label for='tobaccoPermitNumber'>Tobacco Tax Permit Number</label>
+							</div>
+						</div>
+						<div class='form-row'>
+							<div class='form-group date-wrapper' style='margin-top:2em;'>
+								<input
+									class='large'
+									type='date'
+									id='tobaccoPermitExpirationDate'
+									name='tobaccoPermitExpirationDate'
+									placeholder=''
+								>
+								<label for='tobaccoPermitExpirationDate'
+									>Tobacco Permit Expiration Date</label
+								>
+							</div>
+						</div>
+						<div class='form-row'>
+							<div class='form-group'>
+								<input
+									class='large'
+									type='file'
+									id='tobaccoPermitFile'
+									name='tobaccoPermitFile'
+									placeholder=''
+								>
+								<label for='tobaccoPermitFile'>Upload Tobacco Permit Image</label>
+								<div id='fileError' class='error' style='display: none; color: red;'></div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='navigation'>
+				<button type='button' id='prevBtn'>Previous</button>
+				<button type='button' id='nextBtn'>Next</button>
+				<button id='submitBtn' style='display: none;' type="submit">Submit</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script src='{{ 'registration-form.js' | asset_url }}' async></script>
