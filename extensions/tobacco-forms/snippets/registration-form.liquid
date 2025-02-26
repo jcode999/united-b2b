@@ -18,7 +18,7 @@
 					height='100px'
 				>
 				<div class='sections'>
-                    
+                    <span>All the <span style="color:red">*</span> fields are required</span>
 					<div class='form-section active'>
                         
 						<div class='section-header'>
@@ -33,10 +33,12 @@
 							<div class='form-group'>
 								<input type='text' id='firstName' name='firstName' placeholder='' required>
 								<label for='firstName'>First Name</label>
+								<span class="required-tag"> *</span>
 							</div>
 							<div class='form-group'>
 								<input type='text' id='lastName' name='lastName' placeholder='' required>
 								<label for='lastName'>Last Name</label>
+								<span class="required-tag"> *</span>
 							</div>
 						</div>
 						<div class='form-row large'>
@@ -50,6 +52,7 @@
 									required
 								>
 								<label for='email'>Email</label>
+								<span class="required-tag"> *</span>
 							</div>
 						</div>
 						<div class='form-row large'>
@@ -59,10 +62,11 @@
 									id='phoneNumber'
 									name='phoneNumber'
 									placeholder=''
-									class='large'
+									class='large no-spin'
 									required
 								>
 								<label for='phoneNumber'>Phone Number</label>
+								<span class="required-tag">*</span>
 							</div>
 						</div>
                         <div class='form-row'>
@@ -77,6 +81,7 @@
 								>
 								<label for='validIdFile'>Upload Valid ID</label>
 								<div id='fileError' class='error' style='display: none; color: red;'></div>
+								<span class="required-tag"> *</span>
 							</div>
 							
 						</div>
@@ -101,6 +106,7 @@
 									required
 								>
 								<label for='businessName'>Business Name</label>
+								<span class="required-tag">*</span>
 							</div>
 						</div>
 						<div class='form-row large'>
@@ -114,6 +120,7 @@
 									required
 								>
 								<label for='businessAddress1'>Address 1</label>
+								<span class="required-tag">*</span>
 							</div>
 						</div>
 						<div class='form-row large'>
@@ -138,6 +145,7 @@
 									required
 								>
 								<label for='businessCity'>City</label>
+								<span class="required-tag">*</span>
 							</div>
 							<div class='form-group'>
 								<input
@@ -148,6 +156,7 @@
 									required
 								>
 								<label for='businessState'>State</label>
+								<span class="required-tag">*</span>
 							</div>
 							<div class='form-group'>
 								<input
@@ -158,6 +167,7 @@
 									required
 								>
 								<label for='businessZip'>Zip</label>
+								<span class="required-tag">*</span>
 							</div>
 						</div>
 						
@@ -166,19 +176,18 @@
                         <div class="section-header">
                             <h1>License and Permits</h1>
                         </div>
-						
-						<div class='form-row large'>
-							<div class='form-group'>
+						<div class='form-row'>
+							<div class='form-group large'>
 								<input
 									class='large'
 									type='text'
-									id='salesAndUseTaxPermitNumber'
-									name='salesAndUseTaxPermitNumber'
+									id='ein'
+									name='ein'
 									placeholder=''
 									required
 								>
-								<label for='salesAndUseTaxPermitNumber'>Sales And Use Permit Number</label>
-								
+								<label for='ein'>EIN</label>
+								<span class="required-tag">*</span>
 							</div>
 						</div>
                         <div class='form-row'>
@@ -186,12 +195,42 @@
 								<input
 									class='large'
 									type='file'
-									id='salesAndUseTaxFile'
-									name='salesAndUseTaxFile'
+									id='einFile'
+									name='einFile'
 									placeholder=''
                                     required
 								>
-								<label for='salesAndUseTaxFile'>Upload Sales and Use Tax Permit</label>
+								<label for='einFile'>Upload EIN File</label>
+								<span class="required-tag">*</span>
+								<div id='fileError' class='error' style='display: none; color: red;'></div>
+							</div>
+							
+						</div>
+						<div class='form-row'>
+							<div class='form-group large'>
+								<input
+									class='large'
+									type='text'
+									id='salesAndUseTaxPermitNumber'
+									name='salesAndUseTaxPermitNumber'
+									placeholder=''
+									
+								>
+								<label for='salesAndUseTaxPermitNumber'>Sales and Use Tax Number</label>
+								
+							</div>
+						</div>
+						<div class='form-row'>
+							<div class='form-group'>
+								<input
+									class='large'
+									type='file'
+									id='salesAndUseTaxFile'
+									name='salesAndUseTaxFile'
+									placeholder=''
+                                    
+								>
+								<label for='salesAndUseTaxFile'>Upload Sales and Use Tax ID</label>
 								<div id='fileError' class='error' style='display: none; color: red;'></div>
 							</div>
 							

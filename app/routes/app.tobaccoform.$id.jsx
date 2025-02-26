@@ -238,11 +238,13 @@ export default function TobaccoForm() {
                             <h3 style={{ 'fontWeight': 'bold' }}>Business Details</h3>
                         </div>
                         <div style={detailStyles}>
+                        <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>EIN:</span> <span>{form.ein}</span>
                         <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Sales and Use Tax ID:</span> <span>{form.salesAndUseTaxPermitNumber}</span>
                             <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Business Name:</span> <span>{form.businessName}</span>
                             <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Address1:</span> <span>{form.businessAddress1}</span>
                             <span >{form.businessCity},{form.businessState},{form.businessZip}</span>
                             <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Sales and Use Tax ID Image</span><img alt="tobaccoPermitImage" src={form.salesAndUseTaxFileUrl}></img>
+                            <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>EIN File</span><img alt="tobaccoPermitImage" src={form.einFileUrl}></img>
                         </div>
                     </Card>
                 </Grid.Cell>

@@ -126,9 +126,10 @@ const buildSerializedData = (formObject)=>{
       }
      
   }
-  
-  serializableFormObject['tobaccoPermitExpirationDate'] = new Date(serializableFormObject['tobaccoPermitExpirationDate']).toISOString()
-  
+  if(serializableFormObject['tobaccoPermitExpirationDate']!='')
+     serializableFormObject['tobaccoPermitExpirationDate'] = new Date(serializableFormObject['tobaccoPermitExpirationDate']).toISOString()
+  else
+  serializableFormObject['tobaccoPermitExpirationDate'] = null
   return serializableFormObject
 }
 

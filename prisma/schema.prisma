@@ -58,7 +58,9 @@ model TobaccoForm {
   businessState    String
   businessZip      String
 
-  salesAndUseTaxPermitNumber  String
+  ein              String @default("")
+  einFileUrl       String @default("")
+  salesAndUseTaxPermitNumber  String? @default("")
   salesAndUseTaxFileUrl       String @default("")
 
   tobaccoPermitNumber         String?
@@ -67,4 +69,5 @@ model TobaccoForm {
 
   approved         Boolean? @default(false)
   shopifyAccountId String?  @default("")
+  
 }

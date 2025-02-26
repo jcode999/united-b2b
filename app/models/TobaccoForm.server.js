@@ -190,8 +190,8 @@ const notifyCustomer = (form) => {
     customerName: '',
     id: '',
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
+      user: process.env.MERCHANT_EMAIL,
+      pass: process.env.MERCHANT_PASS
     },
     html: `
       <h3>United Wholesale Registration (Denied)</h3>

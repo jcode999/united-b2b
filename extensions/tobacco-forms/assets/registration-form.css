@@ -1,3 +1,13 @@
+.no-spin::-webkit-inner-spin-button, 
+.no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spin {
+  -moz-appearance: textfield;
+}
+
 .form-wrapper {
     box-sizing: border-box;
     padding: 20px;
@@ -34,6 +44,7 @@
     display: none;
     
 }
+
 
 
 
@@ -176,6 +187,13 @@ form {
 
 
 
+}
+
+.required-tag{
+    position:absolute;
+    color:red;
+    top:1em;
+    right:0.5em;
 }
 
 
