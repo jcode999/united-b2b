@@ -130,14 +130,19 @@ export async function createCustomer(app_customer, graphql) {
             phone: app_customer.phoneNumber,
             addresses: [
               {
-                "address1": app_customer.businessAdress1,
+                "address1": app_customer.businessAddress1,
                 "city": app_customer.businessCity,
                 "phone": app_customer.phoneNumber,
                 "zip": app_customer.businessZip,
                 "lastName": app_customer.lastName,
                 "firstName": app_customer.firstName,
+                "company":app_customer.businessName,
               }
-            ]
+            ],
+            emailMarketingConsent: {
+                  marketingOptInLevel: "CONFIRMED_OPT_IN",
+                  marketingState: "SUBSCRIBED"
+            }
           },
         },
       },
