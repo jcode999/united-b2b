@@ -8,7 +8,8 @@ export const authenticateErply = async () => {
     'clientCode':process.env.ERPLY_CLIENTCODE || '',
     'request':'verifyUser',
     'sendContentType':'1',
-  } 
+  }
+  console.log("authenticating to erply: ",params)
     try {
       const response = await axios.post(
         `https://${process.env.ERPLY_CLIENTCODE}.erply.com/api/`,

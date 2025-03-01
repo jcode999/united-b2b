@@ -3,7 +3,7 @@ import chalk from 'chalk';
 export const createErplyContactPerson = async (sessionKey: string, registrationRequest: any, employerId: number) => {
   const headers = {
     sessionKey: sessionKey,
-    clientCode: '544739',
+    clientCode: process.env.ERPLY_CLIENTCODE,
     'accept': 'application/json',
     'content-type': 'application/json',
   }
@@ -27,7 +27,7 @@ export const createErplyContactPerson = async (sessionKey: string, registrationR
 export const createErplyAddress = async (sessionKey: string, registrationRequest: any, customerId: number) => {
   const headers = {
     sessionKey: sessionKey,
-    clientCode: '544739',
+    clientCode: process.env.ERPLY_CLIENTCODE,
     'accept': 'application/json',
     'content-type': 'application/json',
   }
@@ -52,7 +52,7 @@ export const createErplyAddress = async (sessionKey: string, registrationRequest
 export const createErplyCustomer = async (sessionKey: string, registrationForm: any) => {
   const headers = {
     sessionKey: sessionKey,
-    clientCode: '544739',
+    clientCode: process.env.ERPLY_CLIENTCODE,
     'accept': 'application/json',
     'content-type': 'application/json',
   }
@@ -66,10 +66,10 @@ export const createErplyCustomer = async (sessionKey: string, registrationForm: 
         headers,
       },
     );
-    // console.log("response from erply(createCustomer): ", response)
+    console.log("response from erply(createCustomer): ", response)
     return response.data;
   } catch (error: any) {
-    // console.error('Error creating business:');
+    console.error('Error creating business:',error);
     throw new Error('Failed to create business');
   }
 };

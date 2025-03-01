@@ -48,7 +48,7 @@ export async function action({ request, params }) {
         console.log("erply service about to start")
         const authResponse = await authenticateErply();
         const sessionKey = authResponse['records'][0]['sessionKey']
-        // console.log("session key ",sessionKey)
+        console.log("session key ",sessionKey)
         const erplyCustomerResponse = await createErplyCustomerWrapper(sessionKey, data)
         console.log("erply errors: ",erplyCustomerResponse.errors)
         return {
