@@ -190,9 +190,8 @@ export default function TobaccoForm() {
                         // secondaryAction={{content: 'Learn more', url: ''}}
                         onDismiss={() => { setShowBanner(false) }}
                     >
-                        <p>
-                            Customer Account has been succesfully created. Don't forget to send the activation link
-                        </p>
+                        <p>Created Customers succesfuuly both on Shopify and Erply.</p>
+                        <p>Please send customer account activation email.</p>
                     </Banner>
                 }
                 {

@@ -104,7 +104,7 @@ export default function TobaccoForms() {
                 </div>
 
                 <div>{businessName}</div>
-                <div>test</div>
+                
               </ResourceItem>
             );
           }}
