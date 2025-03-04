@@ -2,11 +2,30 @@ import {
   Card,
   Page,
   Badge,
-  
+  Button,
 } from "@shopify/polaris";
-
+import { authenticate } from "../shopify.server";
+import {sendAccountInvite} from "../models/TobaccoForm.server";
+import { useSubmit } from "@remix-run/react";
+export async function action({ request }:any){
+  console.log("request to send invite received. sending invite.")
+  const { admin } = await authenticate.admin(request);
+  sendAccountInvite("gid://shopify/Customer/7921928634618",admin.graphql)
+  return null
+}
 
 export default function AdditionalPage() {
+  const submit = useSubmit();
+  const handleSendInvite = () =>{
+    console.log("send invite clicked, submitting...")
+    submit({},{ method:'post' })
+    
+  }
+  
+  const handleTest = ()=>{
+    console.log("hello there..")
+  }
+ 
   return (
     <Page
       backAction={{content: 'Products', url: '#'}}
@@ -44,8 +63,10 @@ export default function AdditionalPage() {
       }}
     >
       <Card>
-        <p>Credit card information</p>
+        <Button onClick={handleSendInvite}>Send Activation Email</Button>
+        <Button onClick={handleTest}>Hello world</Button>
       </Card>
+
     </Page>
   );
 }

@@ -80,7 +80,7 @@ export const generateErplyCustomerRequest = (registrationForm: any) => {
     requests: [
       {
         'name': registrationForm['businessName'],
-        'customerGroupId': 14,
+        'customerGroupId': Number(process.env.DEFAULT_ERPLY_CUSTOMER_GROUP_ID),
         "eInvoiceEmail": registrationForm['email'],
         "eInvoicesViaEmailEnabled": true,
         "emailOptOut": true,
@@ -95,7 +95,7 @@ export const generateErplyCustomerRequest = (registrationForm: any) => {
         "salesForCashOnly": false,
         "shipGoodsWithWaybills": true,
         "taxExempt": false,
-        "typeId": 33,
+        "typeId": Number(process.env.DEFAULT_ERPLY_CUSTOMER_TYPE_ID),
         "mail": registrationForm["email"],
       }
     ]
@@ -106,7 +106,7 @@ export const generateErplyIndividualRequest = (employerId: number, registrationF
   return {
     "requests": [
       {
-        "customerGroupId": 14,
+        "customerGroupId": Number(process.env.DEFAULT_ERPLY_CUSTOMER_GROUP_ID),
         "employerId": employerId,
         "firstName": registrationForm['firstName'],
         "lastName": registrationForm['lastName'],
@@ -125,7 +125,7 @@ export const generateErplyAddressRequest = (customerId: number, registrationRequ
     "postCode": registrationRequest['businessZip'],
     "state": registrationRequest['businessState'],
     "street": registrationRequest['businessAddress1'],
-    "typeId":1,
+    "typeId":Number(process.env.DEFAULT_ERPLY_ADDRESS_TYPE_ID),
     // "typeId": 0,
 
   }

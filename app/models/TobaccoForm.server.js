@@ -185,9 +185,39 @@ export async function createCustomer(app_customer, graphql) {
   }
 
 }
-const notifyCustomer = (form) => {
+export const sendAccountInvite = async (customerId,graphql) =>{
+  const response = await graphql(`mutation CustomerSendAccountInviteEmail($customerId: ID!, $email: EmailInput) {
+    customerSendAccountInviteEmail(customerId: $customerId, email: $email) {
+        customer {
+            id
+        }
+        userErrors {
+        field
+        message
+        }
+    }
+    }`,{
+      variables:{
+        customerId:customerId,
+        email:{
+          body:"Your registration request has been approved. Here's your activation link.",
+          from:process.env.MERCHANT_EMAIL,
+          subject:"Welcome aboard!"
+        }
+      }
+    })
+    const responseBody = await response.json();
+    if (responseBody.errors) {
+      console.log("GraphQL errors:", responseBody.errors);
+      // return null;
+    }
+    
+    return responseBody
+    
+}
+const  notifyCustomer = async (form) => {
   const reason = form['reason']
-  const emailToApplicant = sendEmail({
+  const emailToApplicant = await sendEmail({
     from: process.env.MERCHANT_EMAIL,
     to: form['email'],
     subject: "Registration Form & Account Application (Denied)",
@@ -210,6 +240,48 @@ const notifyCustomer = (form) => {
       </p>
       <p>${reason}</p>
       <p>Please give us a call to resolve this matter.</p>
+      <p>Best regards,</p>
+  
+  
+  
+      <p>United Wholesale</p>
+      <p>817-744-7989</p>
+      <p>Whatsapp/Text. 406-499-9999</p>
+      <p>Contact@united-wholesale.com</p>
+    `,
+  })
+  if (emailToApplicant.success) {
+    console.log("email to applicant sent succesfully")
+  } else {
+    console.warn("failed to send email to applicant")
+  }
+}
+const sendApprovalEmail = async (form) => {
+  // const reason = form['reason']
+  const emailToApplicant = await sendEmail({
+    from: process.env.MERCHANT_EMAIL,
+    to: form['email'],
+    subject: "Registration Form & Account Application (Approved)",
+    text: "",
+    customerName: '',
+    id: '',
+    auth: {
+      user: process.env.MERCHANT_EMAIL,
+      pass: process.env.MERCHANT_PASS
+    },
+    html: `
+      <h3>United Wholesale Registration (Approved)</h3>
+      <br></br>
+  
+      <p>Thank you for applying for an account with United Wholesale and trusting us as your partner.</p>
+      <br></br>
+      <p>
+        Prior to activating your account we need to verify your documentations. This will allow us to streamline your account approval!
+        After submitting the documents, a member of our team will review your information and reach out if we are able to service your location. If you do not hear from us immediately, please rest assured that every application is being cataloged.
+        We appreciate your patience and understanding during this time.
+      </p>
+      
+      <br></br>
       <p>Best regards,</p>
   
   

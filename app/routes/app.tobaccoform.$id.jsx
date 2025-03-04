@@ -13,7 +13,7 @@ import { authenticateErply } from "../erplyServices/erplyAuthenticate.sever"
 import { createErplyCustomerWrapper } from "../erplyServices/erplyCustomers.server"
 import { DeleteIcon } from '@shopify/polaris-icons';
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
-import { getTobaccoForm, createCustomer, denyCustomer, deleteForm } from "../models/TobaccoForm.server"
+import { getTobaccoForm, createCustomer, denyCustomer, deleteForm, sendAccountInvite} from "../models/TobaccoForm.server"
 import { useCallback, useEffect, useState } from 'react';
 import { authenticate } from "../shopify.server";
 import { json } from "@remix-run/node";
@@ -21,6 +21,7 @@ import { json } from "@remix-run/node";
 
 import '../custom-css/app.css'
 import { redirect } from "react-router-dom";
+// import { sendEmail } from "../utils/email.server";
 
 
 export async function loader({ request, params }) {
@@ -28,6 +29,7 @@ export async function loader({ request, params }) {
     return json(await getTobaccoForm(Number(params.id)))
 }
 export async function action({ request, params }) {
+    let invitationResponse = {}
     const data = {
         ...Object.fromEntries(await request.formData()),
     };
@@ -41,18 +43,23 @@ export async function action({ request, params }) {
     const { admin } = await authenticate.admin(request);
     const approve = data['approve']
     if (approve === "true") {
-        const customer = await createCustomer(data, admin.graphql)
-        console.log("shopify customer: ", customer['customer'])
-        console.log("shopify customer errors: ", customer['errors'])
-
+        const shopifyCustomer = await createCustomer(data, admin.graphql)
+        console.log("shopify customer: ", shopifyCustomer['customer'])
+        console.log("shopify customer errors: ", shopifyCustomer['errors'])
+        if(shopifyCustomer['errors'].length === 0){
+            console.log("sending account activation invite")
+            invitationResponse = await sendAccountInvite(shopifyCustomer['customer']['id'],admin.graphql)   
+        }
         console.log("erply service about to start")
         const authResponse = await authenticateErply();
         const sessionKey = authResponse['records'][0]['sessionKey']
         console.log("session key ",sessionKey)
         const erplyCustomerResponse = await createErplyCustomerWrapper(sessionKey, data)
         console.log("erply errors: ",erplyCustomerResponse.errors)
+        
         return {
-            'shopify': customer,
+            'shopify': shopifyCustomer,
+            'sendInvite':invitationResponse,
             'erply': erplyCustomerResponse
         }
 
@@ -78,23 +85,32 @@ export default function TobaccoForm() {
     const [showBanner, setShowBanner] = useState(false)
     const [showDenialForm, setShowDenialForm] = useState(false)
     const [denyReasons, setDenyReason] = useState('')
+    const clientCode = "544739"
+    const [shopifyCustomerID,setShopifyCustomerId] = useState('')
+    const [erplyCustomerID,setErplyCustomerId] = useState('')
 
     const handleDenyValueChange = useCallback(
         (newValue) => setDenyReason(newValue),
         [],
     );
-
+    
+    // console.log("env: ",import.meta.env.VITE_ERPLY_CLIENTCODE)
     useEffect(() => {
         console.log("action data: ", actionData)
         if (!actionData) {
             return
         }
+        if(actionData['erply']['errors'].length == 0){
+            setErplyCustomerId(actionData['erply']['businessResponse']['results'][0]['resourceID'])
+        }
         if (actionData['shopify']['customer'] && actionData['erply']['errors'].length == 0) {
             setSuccess(true)
             setShopifyErrors([])
             setErplyErrors([])
-
+            setShopifyCustomerId(String(actionData['shopify']['customer']['id']).replace("gid://shopify/Customer/",""))
+            setErplyCustomerId(actionData['erply']['businessResponse']['results'][0]['resourceID'])
         }
+        
         else {
             setSuccess(false)
             
@@ -181,7 +197,7 @@ export default function TobaccoForm() {
         >
 
             {showBanner && <div style={{ 'margin': '2em 0' }}>
-                {
+                {/* {
                     success && 
                     <Banner
                         title="Created Customer Account Succesfully"
@@ -193,7 +209,31 @@ export default function TobaccoForm() {
                         <p>Created Customers succesfuuly both on Shopify and Erply.</p>
                         <p>Please send customer account activation email.</p>
                     </Banner>
+                } */}
+                {
+                    shopifyErrors.length ===0 && <Banner
+                    title="Created Shopify Customer Account Succesfully"
+                    tone="success"
+                    onDismiss={() => { setShowBanner(false) }}
+                    >
+                    {(actionData['sendInvite'] && actionData['sendInvite']['data']['customerSendAccountInviteEmail']['userErrors'].length === 0) ? <p>Sent customer invite succesfully</p> : <p>Failed to send account invitation link.</p>}
+                    <p>Copy and paste this link in your browser to view customer account.</p>
+                    <br></br>
+                    <p>{`https://admin.shopify.com/store/jigme-store-dev/customers/${shopifyCustomerID}`}</p>
+                    </Banner>
                 }
+                {
+                    erplyErrors.length ===0 && <Banner
+                    title="Created Erply Account Succesfully"
+                    tone="success"
+                    onDismiss={() => { setShowBanner(false) }}
+                    >
+                    <p>Copy and paste this link in your browser to view customer account.</p>
+                    <br></br>
+                    <p>{`https://us.erply.com/${clientCode}/?lang=eng&section=orgperC&edit=${String(erplyCustomerID)}`}</p>
+                    </Banner>
+                }
+
                 {
                     !success && <Banner
                         title="Issue With Creating Customer Account"
@@ -204,7 +244,7 @@ export default function TobaccoForm() {
                     >
                         <p>Reasons</p>
                         {
-                            shopifyErrors.map((error, index) => (<li key={index}>{error}</li>))
+                            shopifyErrors.map((error, index) => (<li key={index}>{error.message}</li>))
                         }
                         {
                             erplyErrors.map((error,index)=>(
