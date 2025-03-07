@@ -15,9 +15,17 @@ RUN npm remove @shopify/cli
 
 COPY . .
 
+# Generate Prisma client
+RUN npx prisma generate
+
+# Apply database migrations
+RUN npx prisma migrate deploy
+
 RUN npm run build
 
 # You'll probably want to remove this in production, it's here to make it easier to test things!
-RUN rm -f prisma/dev.sqlite
+# RUN rm -f prisma/dev.sqlite
+
+
 
 CMD ["npm", "run", "docker-start"]

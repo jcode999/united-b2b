@@ -9,7 +9,7 @@
 				height='500px'
 			>
 		</div>
-
+		{% comment %} <button id="test-form">Send Test Form</button> {% endcomment %}
 		<form id='customForm' method='post' enctype='multipart/form-data'>
 			<div class='sections-container'>
 				<img
@@ -18,11 +18,12 @@
 					height='100px'
 				>
 				<div class='sections'>
-                    <span>All the <span style="color:red">*</span> fields are required</span>
+                    <span class="requirement-annoucement">All the <span style="color:red">*</span> fields are required</span>
 					<div class='form-section active'>
                         
 						<div class='section-header'>
-							<h1>Personal Details</h1>
+							<h1>Contact Details</h1>
+							
 							
 						</div>
                         <p class='error-message' style='color: red; display: none;'>
@@ -79,7 +80,7 @@
 									placeholder=''
                                     required
 								>
-								<label for='validIdFile'>Upload Valid ID</label>
+								<label for='validIdFile'>Upload Drivers License</label>
 								<div id='fileError' class='error' style='display: none; color: red;'></div>
 								<span class="required-tag"> *</span>
 							</div>

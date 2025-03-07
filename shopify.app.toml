@@ -3,7 +3,7 @@
 client_id = "03034dae317a96d1d93360111343335c"
 name = "united-b2b"
 handle = "united-b2b"
-application_url = "https://custom-codes.com"
+application_url = "https://putting-amendment-fu-racing.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,16 +17,16 @@ scopes = "read_products,write_customers"
 
 [auth]
 redirect_urls = [
-  "https://custom-codes.com/auth/callback",
-  "https://custom-codes.com/auth/shopify/callback",
-  "https://custom-codes.com/api/auth/callback"
+  "https://putting-amendment-fu-racing.trycloudflare.com/auth/callback",
+  "https://putting-amendment-fu-racing.trycloudflare.com/auth/shopify/callback",
+  "https://putting-amendment-fu-racing.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
-api_version = "2024-07"
+api_version = "2025-01"
 
 [app_proxy]
-url = "https://custom-codes.com/tobaccoform"
+url = "https://putting-amendment-fu-racing.trycloudflare.com/tobaccoform"
 subpath = "proxy"
 prefix = "apps"
 

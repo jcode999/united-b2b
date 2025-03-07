@@ -6,8 +6,9 @@ import fs from 'fs';
 import path from 'path';
 import { sendEmail } from "../utils/email.server";
 
-
+// import { authenticateErply } from "../erplyServices/erplyAuthenticate.sever"
 const API_KEY = process.env.SHOPIFY_API_KEY || "my-secret-api-key";
+
 const notifyMerchant = (creationResponse) => {
   const formLink = `https://admin.shopify.com/store/6dcd6a/apps/united-b2b/app/tobaccoform/${String(creationResponse['id'])}`
   const emailToMerchant = sendEmail({
@@ -155,53 +156,14 @@ export async function loader({request}){
   }
   
 }
+
 export async function action({ request }) {
   console.log("request received for tobacco forms")
-  if (request.method === "GET") {
-    // Handle GET request
-    try {
-      const tobaccoForms = await db.tobaccoForm.findMany(); // Fetch all records
-      
-      
-      return new Response(JSON.stringify(tobaccoForms, { status: 200 }));
-    } catch (error) {
-      console.error("Failed to fetch tobacco forms.", error);
-      return new Response(JSON.stringify({ error: "Failed to fetch tobacco forms" }, { status: 500 }));
-    }
-    
-  }
+  
   const formData = await request.formData();
   const formObject = Object.fromEntries(formData.entries());
   const serializableFormObject = buildSerializedData(formObject)
   
-  
-  // for (const [key, value] of Object.entries(formObject)) {
-  //   if(key==='tobaccoPermitFile'){
-  //     if(value instanceof Blob){
-  //       console.log('tobacco permit file submitted')
-  //       const uploadPath = path.join(process.cwd(), 'public/uploads');
-  //       const businessName = serializableFormObject['businessName'].toLowerCase()
-  //       const joinedBusinessName = businessName.split(' ').join('-')
-  //       const filePath = path.join(uploadPath, `${joinedBusinessName}-tobacco-permit.png`);
-  //       handleFileUpload(value,filePath)
-  //       serializableFormObject['tobaccoPermitUrl'] = `/uploads/${joinedBusinessName.toLowerCase()}-tobacco-permit.png`
-  //     }
-  //     else{
-  //       console.log("no tobacco related document submitted.")
-  //       serializableFormObject['tobaccoPermitUrl'] = ''}
-      
-  //   }
-  //   else if(key==='tobaccoPermitExpirationDate'){
-  //     if(value!=''){
-  //       serializableFormObject['tobaccoPermitExpirationDate'] = new Date(value).toISOString()
-  //     }
-  //   }
-  //   else{
-  //     if(value!=''){
-  //       serializableFormObject[key] = value;
-  //     }
-  //   }
-  // }
   console.log("serialized form: ",serializableFormObject)
   try {
     const creationResponse = await db.tobaccoForm.create({
@@ -220,3 +182,4 @@ export async function action({ request }) {
   return new Response(JSON.stringify({status:201}))
   // return redirect(`https://jigme-store-dev.myshopify.com/`);
 }
+

@@ -5,12 +5,27 @@ import {
   Button,
 } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
-import {sendAccountInvite} from "../models/TobaccoForm.server";
+import {emailAlreadyUsed, phoneAlreadyUsed} from "../shopifyServices/cutomer"
+import { authenticateErply } from "../erplyServices/erplyAuthenticate.sever"
+import { getBusinessByName } from "../erplyServices/erplyCustomers.server"
+// import {sendAccountInvite} from "../models/TobaccoForm.server";
+
 import { useSubmit } from "@remix-run/react";
 export async function action({ request }:any){
   console.log("request to send invite received. sending invite.")
   const { admin } = await authenticate.admin(request);
-  sendAccountInvite("gid://shopify/Customer/7921928634618",admin.graphql)
+  
+  // sendAccountInvite("gid://shopify/Customer/7921928634618",admin.graphql)
+  const customerByEmail = await emailAlreadyUsed("jimmeysherpa@yahoo.com",admin.graphql)
+  const customerByPhone = await phoneAlreadyUsed("8173198184",admin.graphql)
+  console.log("customer by email: ",customerByEmail)
+  console.log("customer by phone: ",customerByPhone)
+  const authResponse = await authenticateErply();
+  const sessionKey = authResponse['records'][0]['sessionKey']
+  getBusinessByName("Foo",sessionKey)
+
+
+  // console.log("existing customer: ",responseBody.data.customerByIdentifier.id)
   return null
 }
 
@@ -25,7 +40,10 @@ export default function AdditionalPage() {
   const handleTest = ()=>{
     console.log("hello there..")
   }
- 
+  
+  // const validateEmail = (email:String)=>{
+  //   emailAlreadyUsed(email,)
+  // }
   return (
     <Page
       backAction={{content: 'Products', url: '#'}}
@@ -66,7 +84,7 @@ export default function AdditionalPage() {
         <Button onClick={handleSendInvite}>Send Activation Email</Button>
         <Button onClick={handleTest}>Hello world</Button>
       </Card>
-
+      
     </Page>
   );
 }

@@ -66,7 +66,7 @@ export const createErplyCustomer = async (sessionKey: string, registrationForm: 
         headers,
       },
     );
-    console.log("response from erply(createCustomer): ", response)
+    // console.log("response from erply(createCustomer): ", response)
     return response.data;
   } catch (error: any) {
     console.error('Error creating business:',error);
@@ -81,17 +81,17 @@ export const generateErplyCustomerRequest = (registrationForm: any) => {
       {
         'name': registrationForm['businessName'],
         'customerGroupId': Number(process.env.DEFAULT_ERPLY_CUSTOMER_GROUP_ID),
-        "eInvoiceEmail": registrationForm['email'],
+        "eInvoiceEmail": String(registrationForm['email']),
         "eInvoicesViaEmailEnabled": true,
         "emailOptOut": true,
         "invoicesViaDocuraEnabled": false,
         "invoicesViaEmailEnabled": true,
         "isStarred": false,
-        "mobile": registrationForm['phoneNumber'],
+        "mobile": String(registrationForm['phoneNumber']),
         "paperMailsEnabled": false,
         "paysViaFactoring": true,
         "penaltyForOverdue": 0,
-        "phone": registrationForm['phoneNumber'],
+        "phone": String(registrationForm['phoneNumber']),
         "salesForCashOnly": false,
         "shipGoodsWithWaybills": true,
         "taxExempt": false,
@@ -122,7 +122,7 @@ export const generateErplyAddressRequest = (customerId: number, registrationRequ
     "city": registrationRequest['businessCity'],
     "country": registrationRequest['businessCountry'],
     "customerId": customerId,
-    "postCode": registrationRequest['businessZip'],
+    "postCode": String(registrationRequest['businessZip']),
     "state": registrationRequest['businessState'],
     "street": registrationRequest['businessAddress1'],
     "typeId":Number(process.env.DEFAULT_ERPLY_ADDRESS_TYPE_ID),
@@ -130,6 +130,7 @@ export const generateErplyAddressRequest = (customerId: number, registrationRequ
 
   }
 }
+
 
 export const createErplyCustomerWrapper = async (sessionkey: string, registrationRequest: any) => {
   const errors = []
@@ -182,4 +183,32 @@ export const createErplyCustomerWrapper = async (sessionkey: string, registratio
     'addressResponse': addressResponse,
     'errors':errors,
   }
+}
+
+export const getBusinessByName = async (businessName:String,sessionKey:string) =>{
+  try{
+    const response = await axios.get("https://api-crm-us.erply.com/v1/customers/businesses",{
+      params:{
+        'name':businessName,
+      },
+      headers : {
+        sessionKey: sessionKey,
+        clientCode: process.env.ERPLY_CLIENTCODE,
+        'accept': 'application/json',
+        'content-type': 'application/json',
+      }
+    })
+    // console.log(response.data)
+    return response.data
+  }
+  catch(error){
+    console.log("error fetching business by name")
+    console.log(error)
+    return null
+  }
+}
+
+export const buildErplyCustomerAccountUrl = (customerId:String) =>{
+  const clientCode = process.env.ERPLY_CLIENTCODE
+  return `https://us.erply.com/${clientCode}/?lang=eng&section=orgperC&edit=${String(customerId)}`
 }

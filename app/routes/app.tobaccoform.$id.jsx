@@ -9,32 +9,84 @@ import {
 
 } from "@shopify/polaris";
 // import db from "../db.server"; 
+// import { Test } from "./components/Test"
+import ApprovedCustomer  from "../components/ApprovedCustomer"
+import ErrorFields from "../components/ErrorFields"
 import { authenticateErply } from "../erplyServices/erplyAuthenticate.sever"
-import { createErplyCustomerWrapper } from "../erplyServices/erplyCustomers.server"
+import { buildErplyCustomerAccountUrl, createErplyCustomerWrapper, getBusinessByName } from "../erplyServices/erplyCustomers.server"
 import { DeleteIcon } from '@shopify/polaris-icons';
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
-import { getTobaccoForm, createCustomer, denyCustomer, deleteForm, sendAccountInvite} from "../models/TobaccoForm.server"
+import { getTobaccoForm, createCustomer, denyCustomer, deleteForm, sendAccountInvite, updateTobaccoForm } from "../models/TobaccoForm.server"
 import { useCallback, useEffect, useState } from 'react';
 import { authenticate } from "../shopify.server";
-import { json } from "@remix-run/node";
 
+import {emailAlreadyUsed, phoneAlreadyUsed} from "../shopifyServices/cutomer"
 
 import '../custom-css/app.css'
 import { redirect } from "react-router-dom";
 // import { sendEmail } from "../utils/email.server";
 
 
+const validateForm = async (form,graphql,sessionKey)=>{
+    console.log("running validation.")
+    const emailUser = await emailAlreadyUsed(form['email'],graphql)
+    const phoneUser = await phoneAlreadyUsed(form['phoneNumber'],graphql)
+    
+    const businesses = await getBusinessByName(form['businessName'],sessionKey)
+    const errors = []
+    if(emailUser)
+        errors.push({'field':'email','error':'Customer with such email address already exists.','value':form['email'],'user':emailUser})
+    if(phoneUser)
+        errors.push({'field':'phoneNumber','error':'Customer with such phone number already exists.'})
+    if(businesses.length>0)
+        errors.push({'field':'businessName','error':'Customer with similar business name already exists.'})
+    console.log("form errors: ",errors)
+    return errors
+}   
 export async function loader({ request, params }) {
-    // console.log("request recieved for ", request)
-    return json(await getTobaccoForm(Number(params.id)))
+    const form = await getTobaccoForm(Number(params.id))
+    const customerLinks = {
+        'shopify':'',
+        'erply':''
+    }
+    console.log("loader form: ",form)
+    const { admin } = await authenticate.admin(request);
+    const authResponse = await authenticateErply();
+    const sessionKey = authResponse['records'][0]['sessionKey']
+    const formErrors = await validateForm(form,admin.graphql,sessionKey)
+    if(form['approved']){
+        customerLinks['erply']=buildErplyCustomerAccountUrl(form['erplyCustomerId'])
+    }
+    return {form,formErrors,customerLinks}
 }
 export async function action({ request, params }) {
     let invitationResponse = {}
-    const data = {
-        ...Object.fromEntries(await request.formData()),
-    };
+    // const stringKeys = ['phoneNumber','businessZip','ein','salesAndUseTax']
+    const formData = await request.formData();
+    const data = Object.fromEntries(
+        Array.from(formData.entries()).map(([key, value]) => {
+            try {
+                return [key, JSON.parse(value)]; // Parse JSON for numbers, booleans, objects, etc.
+            } catch {
+                return [key, value]; // If parsing fails, keep as string
+            }
+        })
+    );
 
-    if (request.method === "DELETE") {
+
+    if (request.method === "PUT") {
+        console.log("saving updated form: ")
+        const updatedForm = await updateTobaccoForm(Number(data['id']), 
+        { ...data,
+            id: Number(data['id']),
+            phoneNumber:String(data['phoneNumber']),
+            businessZip:String(data['businessZip']),
+            ein:String(data['ein'])
+         })
+        console.log("updated form (response) ", updatedForm)
+        return null
+    }
+    else if (request.method === "DELETE") {
         console.log("deleting")
         deleteForm(Number(data['id']))
         return redirect("/app")
@@ -42,30 +94,45 @@ export async function action({ request, params }) {
 
     const { admin } = await authenticate.admin(request);
     const approve = data['approve']
-    if (approve === "true") {
+    if (approve === true) {
         const shopifyCustomer = await createCustomer(data, admin.graphql)
         console.log("shopify customer: ", shopifyCustomer['customer'])
         console.log("shopify customer errors: ", shopifyCustomer['errors'])
-        if(shopifyCustomer['errors'].length === 0){
+        if (shopifyCustomer['errors'].length === 0) {
             console.log("sending account activation invite")
-            invitationResponse = await sendAccountInvite(shopifyCustomer['customer']['id'],admin.graphql)   
+            invitationResponse = await sendAccountInvite(shopifyCustomer['customer']['id'], admin.graphql)
         }
         console.log("erply service about to start")
         const authResponse = await authenticateErply();
         const sessionKey = authResponse['records'][0]['sessionKey']
-        console.log("session key ",sessionKey)
+        console.log("session key ", sessionKey)
         const erplyCustomerResponse = await createErplyCustomerWrapper(sessionKey, data)
-        console.log("erply errors: ",erplyCustomerResponse.errors)
-        
+        console.log("erply responses: ",erplyCustomerResponse)
+        console.log("erply errors: ", erplyCustomerResponse.errors)
+        if (erplyCustomerResponse['errors'].length==0){
+            try{
+                const response = await updateTobaccoForm(data['id'],
+                {
+                    
+                    erplyCustomerId:erplyCustomerResponse['businessResponse']['results'][0]['resourceID'],
+                    erplyAddressId:erplyCustomerResponse['addressResponse']['id'],
+                    phoneNumber:String(data['phoneNumber']),
+                    businessZip:String(data['businessZip']),
+                    ein:String(data['ein'])
+                }
+            )
+            console.log("response from updateForm: ",response)
+        }
+            catch(error){
+                console.log("error saving registration form: ",error)
+            }
+        }
         return {
+            'action':'save',
             'shopify': shopifyCustomer,
-            'sendInvite':invitationResponse,
+            'sendInvite': invitationResponse,
             'erply': erplyCustomerResponse
         }
-
-
-
-
     }
     denyCustomer(data)
     return null
@@ -73,7 +140,11 @@ export async function action({ request, params }) {
 }
 
 export default function TobaccoForm() {
-    const form = useLoaderData()
+    const {form,formErrors,customerLinks} = useLoaderData()
+    console.log("formErrors: ",formErrors)
+    
+    const [updateFormData, setUpdatedFormData] = useState({ ...form })
+    
     const fullName = `${form.firstName} ${form.lastName}`
     const expirationDate = new Date(form.tobaccoPermitExpirationDate);
     const submit = useSubmit();
@@ -81,45 +152,46 @@ export default function TobaccoForm() {
 
     const [success, setSuccess] = useState(false)
     const [shopifyErrors, setShopifyErrors] = useState([])
-    const [erplyErrors,setErplyErrors] = useState([])
+    const [erplyErrors, setErplyErrors] = useState([])
     const [showBanner, setShowBanner] = useState(false)
     const [showDenialForm, setShowDenialForm] = useState(false)
     const [denyReasons, setDenyReason] = useState('')
-    const clientCode = "545614"
-    const [shopifyCustomerID,setShopifyCustomerId] = useState('')
-    const [erplyCustomerID,setErplyCustomerId] = useState('')
+    const clientCode = "544739"
+    // const storeName = "6dcd6a"
+    const [shopifyCustomerID, setShopifyCustomerId] = useState('')
+    const [erplyCustomerID, setErplyCustomerId] = useState('')
 
     const handleDenyValueChange = useCallback(
         (newValue) => setDenyReason(newValue),
         [],
     );
-    
+
     // console.log("env: ",import.meta.env.VITE_ERPLY_CLIENTCODE)
     useEffect(() => {
         console.log("action data: ", actionData)
         if (!actionData) {
             return
         }
-        if(actionData['erply']['errors'].length == 0){
+        if (actionData['erply']['errors'].length == 0) {
             setErplyCustomerId(actionData['erply']['businessResponse']['results'][0]['resourceID'])
         }
         if (actionData['shopify']['customer'] && actionData['erply']['errors'].length == 0) {
             setSuccess(true)
             setShopifyErrors([])
             setErplyErrors([])
-            setShopifyCustomerId(String(actionData['shopify']['customer']['id']).replace("gid://shopify/Customer/",""))
+            setShopifyCustomerId(String(actionData['shopify']['customer']['id']).replace("gid://shopify/Customer/", ""))
             setErplyCustomerId(actionData['erply']['businessResponse']['results'][0]['resourceID'])
         }
-        
+
         else {
             setSuccess(false)
-            
+
             if (!actionData['shopify']['customer'])
                 setShopifyErrors(actionData['shopify']['errors'])
-            if(actionData['erply']['errors'].length > 0){
-               setErplyErrors(actionData['erply']['errors'])
+            if (actionData['erply']['errors'].length > 0) {
+                setErplyErrors(actionData['erply']['errors'])
             }
-            
+
             // setErrors(actionErrors)
 
         }
@@ -147,6 +219,8 @@ export default function TobaccoForm() {
         formData.append("approve", "true");
         formData.append("reason", denyReasons);
         submit(formData, { method: 'post' })
+        
+        
     }
     const handleDenyClick = () => {
         console.log("setting show denial..")
@@ -172,67 +246,83 @@ export default function TobaccoForm() {
     const handleDelete = () => {
         submit(form, { method: 'DELETE' })
     }
-    const handleApproved = () => {
-        console.log("redirecting to users account")
-        const store_name = "jigme-store-dev"
-        const customerID = String(form['shopifyAccountId']).replace("gid://shopify/Customer/", '')
+    
+    // }
+    const handleChange = (field,value) => {
+        // e.preventDefault();
+        
+        setUpdatedFormData({
+            ...updateFormData,
+            [field]: value,
+        });
+    };
 
-        const link = `https://admin.shopify.com/store/${store_name}/customers/${customerID}`
-        console.log("link: ", link)
-        window.location.href = link;
-    }
+    const handleSubmit = () => {
+        
+        console.log("Saved Data:", updateFormData);
+        submit(updateFormData, { 'method': 'PUT' })
+    };
+
+    // useEffect(()=>{
+    //     console.log("form data updated")
+    //     console.log(updateFormData)
+    // },[updateFormData])
 
     return (
 
         <Page fullWidth
-            title="Customer Details"
-            primaryAction={form['approved'] ? { content: 'Approved', disabled: true, onAction: () => handleApproved() } :
-                { content: 'Approve', disabled: false, onAction: () => handleCreate() }
+            title="Request Details"
+            primaryAction={form['approved'] ? { content: 'Approved', disabled: true, onAction: () => {} } :
+                { content: 'Approve', disabled: false, onAction: () => handleCreate(true) }
             }
             secondaryActions={[
                 !form['approved'] && { content: 'Deny', destructive: true, onAction: () => handleDenyClick() },
                 { content: 'Delete', destructive: true, icon: DeleteIcon, onAction: () => handleDelete() }
             ]}
 
-        >
+        >   
+            {form['approved'] &&
+                <div>
+                    <ApprovedCustomer erplyCustomerId={customerLinks['erply']} shopifyCustomerID=""/>
+                </div>}
+
+            {!form['approved'] && formErrors.length>0 && 
+                <ErrorFields
+                    errorFields={formErrors}
+                    form={updateFormData}
+                    handleFormChange={handleChange}
+                    handleSubmit={handleSubmit}
+                 /> }
 
             {showBanner && <div style={{ 'margin': '2em 0' }}>
+
                 {/* {
-                    success && 
-                    <Banner
-                        title="Created Customer Account Succesfully"
+                    shopifyErrors.length === 0 && <Banner
+                        title="Created Shopify Customer Account Succesfully"
                         tone="success"
-                        // action={{content: 'View Customers Account', url: ''}}
-                        // secondaryAction={{content: 'Learn more', url: ''}}
                         onDismiss={() => { setShowBanner(false) }}
                     >
-                        <p>Created Customers succesfuuly both on Shopify and Erply.</p>
-                        <p>Please send customer account activation email.</p>
+                        {(actionData['sendInvite'] && actionData['sendInvite']['data']['customerSendAccountInviteEmail']['userErrors'].length === 0) ? <p>Sent customer invite succesfully</p> : <p>Failed to send account invitation link.</p>}
+                        <p>Link to Shopify Customers Account</p>
+                        <br></br>
+                        <a href={`https://admin.shopify.com/store/jigme-store-dev/customers/${shopifyCustomerID}`} target="__blank" rel="noopener noreferrer">Shopify Customer Link</a>
+                    </Banner>
+                }
+                {
+                    erplyErrors.length === 0 && <Banner
+                        title="Created Erply Account Succesfully"
+                        tone="success"
+                        onDismiss={() => { setShowBanner(false) }}
+                    >
+                        <p>Click the link below to visit customer account in Erply.</p>
+                        <br></br>
+                        
+                        <a 
+                        href={`https://us.erply.com/${clientCode}/?lang=eng&section=orgperC&edit=${String(erplyCustomerID)}`}
+                        target="_blank" rel="noopener noreferrer"
+                        >Erply Customer Link</a>
                     </Banner>
                 } */}
-                {
-                    shopifyErrors.length ===0 && <Banner
-                    title="Created Shopify Customer Account Succesfully"
-                    tone="success"
-                    onDismiss={() => { setShowBanner(false) }}
-                    >
-                    {(actionData['sendInvite'] && actionData['sendInvite']['data']['customerSendAccountInviteEmail']['userErrors'].length === 0) ? <p>Sent customer invite succesfully</p> : <p>Failed to send account invitation link.</p>}
-                    <p>Copy and paste this link in your browser to view customer account.</p>
-                    <br></br>
-                    <p>{`https://admin.shopify.com/store/jigme-store-dev/customers/${shopifyCustomerID}`}</p>
-                    </Banner>
-                }
-                {
-                    erplyErrors.length ===0 && <Banner
-                    title="Created Erply Account Succesfully"
-                    tone="success"
-                    onDismiss={() => { setShowBanner(false) }}
-                    >
-                    <p>Copy and paste this link in your browser to view customer account.</p>
-                    <br></br>
-                    <p>{`https://us.erply.com/${clientCode}/?lang=eng&section=orgperC&edit=${String(erplyCustomerID)}`}</p>
-                    </Banner>
-                }
 
                 {
                     !success && <Banner
@@ -247,7 +337,7 @@ export default function TobaccoForm() {
                             shopifyErrors.map((error, index) => (<li key={index}>{error.message}</li>))
                         }
                         {
-                            erplyErrors.map((error,index)=>(
+                            erplyErrors.map((error, index) => (
                                 <li key={index}>Issue with creating Erply {error.resource}</li>
                             ))
                         }
@@ -274,7 +364,8 @@ export default function TobaccoForm() {
                     </Banner>
                 </div>
             }
-            <form>
+            <form style={{'margin':'2em 0'}}>
+                
                 <Grid>
 
                     <Grid.Cell columnSpan={{ xs: 6, sm: 3, md: 3, lg: 6, xl: 6 }}>
@@ -285,8 +376,8 @@ export default function TobaccoForm() {
 
                             <div style={detailStyles}>
                                 <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Name:</span> <span>{fullName}</span>
-                                <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Email:</span> <span>{form.email}</span>
-                                <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Phone:</span> <span>{form.phoneNumber}</span>
+                                <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Email:</span> <input type="text" onChange={handleChange} value={updateFormData.email} name="email" id="email" ></input>
+                                <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>Phone:</span> <input name="phoneNumber" type="text" onChange={handleChange} value={updateFormData.phoneNumber} id="phoneNumber"></input>
                                 <span style={{ 'fontWeight': 'bold', 'marginTop': '1em' }}>ID Image</span><img alt="validIdFile" src={form.validIdFileUrl}></img>
                             </div>
 
@@ -325,6 +416,8 @@ export default function TobaccoForm() {
 
 
                 </Grid>
+                {/* <Button onClick={handleSubmit}>Save</Button> */}
+                
             </form>
 
 

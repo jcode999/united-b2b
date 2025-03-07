@@ -1,5 +1,5 @@
 {
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "app/routes/app._index_demo.jsx", "app/routes/tobaccoform.jsx", "app/entry.server.tsx", "app/components/DetailsCard.tsx"],
+  "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "app/routes/app._index_demo.jsx", "app/routes/tobaccoform.jsx", "app/entry.server.tsx", "app/components/DetailsCard.tsx", "app/components/ApprovedCustomer.tsx", "app/components/Test.tsx"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "strict": true,

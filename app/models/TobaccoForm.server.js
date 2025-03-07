@@ -31,6 +31,8 @@ export async function getTobaccoForm(id) {
 }
 
 export async function updateTobaccoForm(id, data) {
+  console.log("updating registration form with customer ids/new data:")
+  console.log("data: ",data)
   try {
     const updatedForm = await db.tobaccoForm.update({
       where: { id: id },
@@ -127,13 +129,13 @@ export async function createCustomer(app_customer, graphql) {
             firstName: app_customer.firstName,
             lastName: app_customer.lastName,
             email: app_customer.email,
-            phone: app_customer.phoneNumber,
+            phone: String(app_customer.phoneNumber),
             addresses: [
               {
-                "address1": app_customer.businessAddress1,
-                "city": app_customer.businessCity,
-                "phone": app_customer.phoneNumber,
-                "zip": app_customer.businessZip,
+                "address1": String(app_customer.businessAddress1),
+                "city": String(app_customer.businessCity),
+                "phone": String(app_customer.phoneNumber),
+                "zip": String(app_customer.businessZip),
                 "lastName": app_customer.lastName,
                 "firstName": app_customer.firstName,
                 "company":app_customer.businessName,
@@ -256,48 +258,48 @@ const  notifyCustomer = async (form) => {
     console.warn("failed to send email to applicant")
   }
 }
-const sendApprovalEmail = async (form) => {
-  // const reason = form['reason']
-  const emailToApplicant = await sendEmail({
-    from: process.env.MERCHANT_EMAIL,
-    to: form['email'],
-    subject: "Registration Form & Account Application (Approved)",
-    text: "",
-    customerName: '',
-    id: '',
-    auth: {
-      user: process.env.MERCHANT_EMAIL,
-      pass: process.env.MERCHANT_PASS
-    },
-    html: `
-      <h3>United Wholesale Registration (Approved)</h3>
-      <br></br>
+// const sendApprovalEmail = async (form) => {
+//   // const reason = form['reason']
+//   const emailToApplicant = await sendEmail({
+//     from: process.env.MERCHANT_EMAIL,
+//     to: form['email'],
+//     subject: "Registration Form & Account Application (Approved)",
+//     text: "",
+//     customerName: '',
+//     id: '',
+//     auth: {
+//       user: process.env.MERCHANT_EMAIL,
+//       pass: process.env.MERCHANT_PASS
+//     },
+//     html: `
+//       <h3>United Wholesale Registration (Approved)</h3>
+//       <br></br>
   
-      <p>Thank you for applying for an account with United Wholesale and trusting us as your partner.</p>
-      <br></br>
-      <p>
-        Prior to activating your account we need to verify your documentations. This will allow us to streamline your account approval!
-        After submitting the documents, a member of our team will review your information and reach out if we are able to service your location. If you do not hear from us immediately, please rest assured that every application is being cataloged.
-        We appreciate your patience and understanding during this time.
-      </p>
+//       <p>Thank you for applying for an account with United Wholesale and trusting us as your partner.</p>
+//       <br></br>
+//       <p>
+//         Prior to activating your account we need to verify your documentations. This will allow us to streamline your account approval!
+//         After submitting the documents, a member of our team will review your information and reach out if we are able to service your location. If you do not hear from us immediately, please rest assured that every application is being cataloged.
+//         We appreciate your patience and understanding during this time.
+//       </p>
       
-      <br></br>
-      <p>Best regards,</p>
+//       <br></br>
+//       <p>Best regards,</p>
   
   
   
-      <p>United Wholesale</p>
-      <p>817-744-7989</p>
-      <p>Whatsapp/Text. 406-499-9999</p>
-      <p>Contact@united-wholesale.com</p>
-    `,
-  })
-  if (emailToApplicant.success) {
-    console.log("email to applicant sent succesfully")
-  } else {
-    console.warn("failed to send email to applicant")
-  }
-}
+//       <p>United Wholesale</p>
+//       <p>817-744-7989</p>
+//       <p>Whatsapp/Text. 406-499-9999</p>
+//       <p>Contact@united-wholesale.com</p>
+//     `,
+//   })
+//   if (emailToApplicant.success) {
+//     console.log("email to applicant sent succesfully")
+//   } else {
+//     console.warn("failed to send email to applicant")
+//   }
+// }
 export async function denyCustomer(app_customer) {
   notifyCustomer(app_customer)
 

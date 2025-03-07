@@ -80,6 +80,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the first section as active
     showSection(currentSection);
 
+    // const testForm = document.getElementById("test-form")
+    // testForm.addEventListener('click',(event)=>{
+    //     console.log("sending test form")
+    //     event.preventDefault()
+    //     const formData = new FormData();
+    //     formData.append("email","jimmeysherpa@gmail.com")
+    //     formData.append("phone","8173198184")
+    //     formData.append("tobaccoPermitExpirationDate","")
+        
+    //     fetch(`/apps/proxy`, {
+    //         method: 'POST',
+    //         body:formData,
+    //       })
+    //       .then(response => {
+    //         console.log(response)
+    //     })
+        
+    // })
     const form = document.getElementById('customForm');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
