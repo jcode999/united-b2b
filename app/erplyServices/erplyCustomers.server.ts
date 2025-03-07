@@ -25,6 +25,7 @@ export const createErplyContactPerson = async (sessionKey: string, registrationR
 };
 
 export const createErplyAddress = async (sessionKey: string, registrationRequest: any, customerId: number) => {
+  console.log("creating address...")
   const headers = {
     sessionKey: sessionKey,
     clientCode: process.env.ERPLY_CLIENTCODE,
@@ -43,7 +44,7 @@ export const createErplyAddress = async (sessionKey: string, registrationRequest
 
     return response.data;
   } catch (error: any) {
-    // console.error('Error creating address:', error);
+    console.error('Error creating address:', error);
     throw new Error('Failed to create address');
   }
 
@@ -121,7 +122,7 @@ export const generateErplyAddressRequest = (customerId: number, registrationRequ
     "address2": registrationRequest['businessAddress2'],
     "city": registrationRequest['businessCity'],
     "country": registrationRequest['businessCountry'],
-    "customerId": customerId,
+    "customerId": Number(customerId),
     "postCode": String(registrationRequest['businessZip']),
     "state": registrationRequest['businessState'],
     "street": registrationRequest['businessAddress1'],
