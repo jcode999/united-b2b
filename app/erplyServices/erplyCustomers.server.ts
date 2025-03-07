@@ -141,6 +141,7 @@ export const createErplyCustomerWrapper = async (sessionkey: string, registratio
   let addressResponse = null;
   try {
     businessResponse = await createErplyCustomer(sessionkey, registrationRequest)
+    console.log("business customer: ",businessResponse)
     customerId = businessResponse['results'][0]['resourceID']
     console.log(chalk.green("business created successfully"))
     console.log("customerId: ", businessResponse['results'][0]['resourceID'])
