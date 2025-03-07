@@ -56,4 +56,7 @@ export async function phoneAlreadyUsed(phone:String,graphql:any){
     }
 
 }
-
+export const buildShopifyCustomerUrl = (shopifyCustomerId:String)=>{
+   const storeName = process.env.STORE_NAME
+   return `https://admin.shopify.com/store/${storeName}/customers/${shopifyCustomerId}`
+}

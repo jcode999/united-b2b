@@ -20,7 +20,7 @@ import { getTobaccoForm, createCustomer, denyCustomer, deleteForm, sendAccountIn
 import { useCallback, useEffect, useState } from 'react';
 import { authenticate } from "../shopify.server";
 
-import {emailAlreadyUsed, phoneAlreadyUsed} from "../shopifyServices/cutomer"
+import {emailAlreadyUsed, phoneAlreadyUsed, buildShopifyCustomerUrl} from "../shopifyServices/cutomer"
 
 import '../custom-css/app.css'
 import { redirect } from "react-router-dom";
@@ -56,6 +56,8 @@ export async function loader({ request, params }) {
     const formErrors = await validateForm(form,admin.graphql,sessionKey)
     if(form['approved']){
         customerLinks['erply']=buildErplyCustomerAccountUrl(form['erplyCustomerId'])
+        
+        customerLinks['shopify']=buildShopifyCustomerUrl(String(form['shopifyAccountId']).replace("gid://shopify/Customer/",""))
     }
     return {form,formErrors,customerLinks}
 }
@@ -283,7 +285,7 @@ export default function TobaccoForm() {
         >   
             {form['approved'] &&
                 <div>
-                    <ApprovedCustomer erplyCustomerId={customerLinks['erply']} shopifyCustomerID=""/>
+                    <ApprovedCustomer erplyCustomerId={customerLinks['erply']} shopifyCustomerId={customerLinks['shopify']}/>
                 </div>}
 
             {!form['approved'] && formErrors.length>0 && 

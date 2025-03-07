@@ -9,6 +9,7 @@ const ApprovedCustomer = ({erplyCustomerId,shopifyCustomerId}:ApprovedCustomerPr
     
     return(
         <>
+        
         <Banner
                         title="Customer has been approved"
                         tone="success"
@@ -25,6 +26,7 @@ const ApprovedCustomer = ({erplyCustomerId,shopifyCustomerId}:ApprovedCustomerPr
                         href={erplyCustomerId}
                         target="_blank" rel="noopener noreferrer"
                         >Erply Customer Link</a> */}
+                        <p>{shopifyCustomerId}</p>
                         <p>View customer accounts</p>
                         <div style={{'display':'flex','gap':'5em','margin':'1em 0'}}>
                             <div >
