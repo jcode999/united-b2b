@@ -1,16 +1,20 @@
 import {
-  Card,
+  
   Page,
   Badge,
-  Button,
+  
 } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import {emailAlreadyUsed, phoneAlreadyUsed} from "../shopifyServices/cutomer"
 import { authenticateErply } from "../erplyServices/erplyAuthenticate.sever"
 import { getBusinessByName } from "../erplyServices/erplyCustomers.server"
 // import {sendAccountInvite} from "../models/TobaccoForm.server";
-
+import RegistrationForm from "~/components/RegistrationForm";
 import { useSubmit } from "@remix-run/react";
+
+export async function loader({ request }:any){
+  return 
+}
 export async function action({ request }:any){
   console.log("request to send invite received. sending invite.")
   const { admin } = await authenticate.admin(request);
@@ -80,11 +84,8 @@ export default function AdditionalPage() {
         hasNext: true,
       }}
     >
-      <Card>
-        <Button onClick={handleSendInvite}>Send Activation Email</Button>
-        <Button onClick={handleTest}>Hello world</Button>
-      </Card>
       
+    <RegistrationForm form={{}}/>
     </Page>
   );
 }

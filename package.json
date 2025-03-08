@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
+    "@react-pdf/renderer": "^4.3.0",
     "@remix-run/dev": "^2.7.1",
     "@remix-run/node": "^2.7.1",
     "@remix-run/react": "^2.7.1",

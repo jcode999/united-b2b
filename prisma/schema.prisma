@@ -63,9 +63,9 @@ model TobaccoForm {
   salesAndUseTaxPermitNumber  String? @default("")
   salesAndUseTaxFileUrl       String @default("")
 
-  tobaccoPermitNumber         String?
+  tobaccoPermitNumber         String? @default("")
   tobaccoPermitExpirationDate DateTime?
-  tobaccoPermitFileUrl            String?
+  tobaccoPermitFileUrl            String? @default("")
 
   approved         Boolean? @default(false)
   shopifyAccountId String?  @default("")
