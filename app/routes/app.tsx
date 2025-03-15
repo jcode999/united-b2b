@@ -26,6 +26,7 @@ export default function App() {
           Home
         </Link>
         <Link to="/app/additional">TobaccoForms</Link>
+        <Link to="/app/product_recomendation">Product Recommender</Link>
       </NavMenu>
       <Outlet />
     </AppProvider>

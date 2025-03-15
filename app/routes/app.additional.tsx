@@ -10,10 +10,10 @@ import { authenticateErply } from "../erplyServices/erplyAuthenticate.sever"
 import { getBusinessByName } from "../erplyServices/erplyCustomers.server"
 // import {sendAccountInvite} from "../models/TobaccoForm.server";
 import RegistrationForm from "~/components/RegistrationForm";
-import { useSubmit } from "@remix-run/react";
+// import { useSubmit } from "@remix-run/react";
 
 export async function loader({ request }:any){
-  return 
+  return null
 }
 export async function action({ request }:any){
   console.log("request to send invite received. sending invite.")
@@ -34,16 +34,16 @@ export async function action({ request }:any){
 }
 
 export default function AdditionalPage() {
-  const submit = useSubmit();
-  const handleSendInvite = () =>{
-    console.log("send invite clicked, submitting...")
-    submit({},{ method:'post' })
+  // const submit = useSubmit();
+  // const handleSendInvite = () =>{
+  //   console.log("send invite clicked, submitting...")
+  //   submit({},{ method:'post' })
     
-  }
+  // }
   
-  const handleTest = ()=>{
-    console.log("hello there..")
-  }
+  // const handleTest = ()=>{
+  //   console.log("hello there..")
+  // }
   
   // const validateEmail = (email:String)=>{
   //   emailAlreadyUsed(email,)

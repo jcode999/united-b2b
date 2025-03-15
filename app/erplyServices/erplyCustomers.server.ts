@@ -50,6 +50,40 @@ export const createErplyAddress = async (sessionKey: string, registrationRequest
 
 }
 
+// export const setAttributes = async (sessionKey:string,registrationForm:any,customerId:number) => {
+//   const headers = {
+//     sessionKey: sessionKey,
+//     clientCode: process.env.ERPLY_CLIENTCODE,
+//     'accept': 'application/json',
+//     'content-type': 'application/json',
+//   }
+//   const requests = [
+//     {
+//       "entity": "customer",
+//       "name": "ein",
+//       "record_id": customerId,
+//       "type": "text",
+//       "value":registrationForm['ein']
+//     },
+//     {
+//       "entity": "customer",
+//       "name": "salesAndUseTaxPermitNumber",
+//       "record_id": customerId,
+//       "type": "text",
+//       "value":registrationForm['salesAndUseTaxPermitNumber']
+//     },
+//     {
+//       "entity": "customer",
+//       "name": "tobaccoPermitNumber",
+//       "record_id": customerId,
+//       "type": "text",
+//       "value":registrationForm['tobaccoPermitNumber']
+//     },
+
+
+//   ]
+
+// } 
 export const createErplyCustomer = async (sessionKey: string, registrationForm: any) => {
   const headers = {
     sessionKey: sessionKey,

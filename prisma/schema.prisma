@@ -73,3 +73,36 @@ model TobaccoForm {
   erplyAddressId Int? @default(-1)
   
 }
+model ContactPerson{
+  id          Int    @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  phoneNumber String
+  email       String
+  validIdFileUrl String @default("")
+  shopifyAccountId String?  @default("")
+  erplyContactPersonId Int
+  businesses Business[]
+}
+
+model Business {
+  id          Int    @id @default(autoincrement())
+  businessName     String
+  businessAddress1 String
+  businessAddress2 String?
+  businessCity     String
+  businessState    String
+  businessZip      String
+
+  ein              String @default("")
+  einFileUrl       String @default("")
+  salesAndUseTaxPermitNumber  String? @default("")
+  salesAndUseTaxFileUrl       String @default("")
+  tobaccoPermitNumber         String? @default("")
+  tobaccoPermitExpirationDate DateTime?
+  tobaccoPermitFileUrl            String? @default("")
+  approved         Boolean? @default(false)
+  customer    ContactPerson @relation(fields: [id], references: [id])
+  erplyBusinessId  Int? @default(-1)
+  erplyAddressId Int? @default(-1)
+}
