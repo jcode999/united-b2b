@@ -196,7 +196,7 @@ export const updateMetaFieldsList = async (graphql:any,customerId:string,value:s
                         "metafields":[
                             {
                                 "namespace":"custom",                             
-                                "key": "recommended_products_list",
+                                "key": "recommended_products",
                                 "type": "list.single_line_text_field",
                                 "value":value,
                             }
