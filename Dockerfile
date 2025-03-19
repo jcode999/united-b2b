@@ -29,3 +29,5 @@ RUN npm run build
 
 
 CMD ["npm", "run", "docker-start"]
+
+#docker run --name united-b2b_001 -d --network united-b2b-network -p 3000:3000 -e PMA_HOST=my-mysql united-b2b_001
